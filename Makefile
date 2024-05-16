@@ -19,11 +19,13 @@ BANNER = "\n\
 \t\t\t\t\t\tby: Waslain & Manbex\n"
 
 # Path
+INCL_PATH	= ./incl/
 SRCS_PATH	= ./srcs/
 OBJS_PATH	= ./objs/
 
 # Files
-SRCS		= main.cpp
+SRCS		=	main.cpp	\
+				Server.cpp
 SRCS		:= $(addprefix $(SRCS_PATH), $(SRCS))
 OBJS		:= $(subst $(SRCS_PATH), $(OBJS_PATH), $(SRCS:.cpp=.o))
 DEPS		:= $(OBJS:.o=.d)
@@ -40,7 +42,7 @@ endef
 
 # Compilator
 CC			= c++
-CFLAGS		= -Wall -Wextra -Werror -std=c++98
+CFLAGS		= -I $(INCL_PATH) -Wall -Wextra -Werror -std=c++98
 #CFLAGS		+= -MMD -g3
 
 # Rules
@@ -52,7 +54,7 @@ $(NAME)	: $(OBJS)
 	@echo $(BANNER)
 
 leak	: $(NAME)
-	@valgrind --leak-check=full --show-leak-kinds=all --suppressions=./.readline.supp --track-origins=yes ./$(NAME)
+	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(NAME)
 
 exec	: $(NAME) clean
 	./$(NAME)
