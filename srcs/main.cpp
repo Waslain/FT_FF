@@ -14,12 +14,20 @@
 
 int main(int argc, char const *argv[])
 {
-	if (argc < 3) {
+	if (argc != 3)
+	{
+		std::cerr << "Error: usage: ./ircserv <port> <password>" << std::endl;
 		return (1);
 	}
 
-	Server	server(atoi(argv[1]), std::string(argv[2]));
-	server.loop();
+	try
+	{
+		Server	server(atoi(argv[1]), std::string(argv[2]));
+		server.loop();
+	}
+	catch (std::exception &e) {
+		std::cerr <<  "Error: " << e.what() << std::endl;
+	}
 
-	return 0;
+	return (1);
 }
