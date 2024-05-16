@@ -12,26 +12,32 @@
 
 #include "Server.hpp"
 
-Server::Server()
+Server::Server(int port, std::string password)
 {
-	//std::cout << "Default Server constructor called" << std::endl;
-}
+	this->_socket = socket(AF_INET, SOCK_STREAM, 0);
 
-Server::Server(const Server &copy)
-{
-	//std::cout << "Server copy constructor called" << std::endl;
+	this->_address.sin_family = AF_INET;
+	this->_address.sin_port = htons(port);
+	this->_address.sin_addr.s_addr = INADDR_ANY;
+	
+	bind(this->_socket, (struct sockaddr*)&this->_address, sizeof(this->_address));
+
+	this->_pass = password;
 }
 
 Server::~Server()
 {
-	//std::cout << "Server deconstructor called" << std::endl;
+	close(this->_socket);
 }
 
-Server &Server::operator=(const Server &src)
+// this code may be temporary
+void	Server::loop()
 {
-	if (this != &src)
-	{
-		//STUFF TO DO
-	}
-	return *this;
+	listen(this->_socket, 5);
+
+	int	clientSocket = accept(this->_socket, NULL, NULL);
+
+	char	buffer[1024] = {0};
+	recv(clientSocket, buffer, sizeof(buffer), 0);
+	std::cout << "Message: " << buffer << std::endl;
 }

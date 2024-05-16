@@ -13,6 +13,10 @@
 #pragma once
 
 #include <iostream>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#include <cstdlib>
 
 class Server
 {
@@ -20,12 +24,16 @@ class Server
 		Server(int port, std::string password);
 		~Server();
 		
-		Server &operator=(const Server &src);
+		void	loop();
+
 	private:
 		Server();
 		Server(const Server &copy);
+		Server &operator=(const Server &src);
+
 		std::string _pass;
-		std::string _host;
-		int _port;
-		int _socket;
+		std::string	_host;
+		int			_port;
+		int 		_socket;
+		sockaddr_in _address;
 };
