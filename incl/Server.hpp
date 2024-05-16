@@ -13,10 +13,14 @@
 #pragma once
 
 #include <iostream>
+#include <errno.h>
 #include <sys/socket.h>
+#include <arpa/inet.h>
 #include <netinet/in.h>
 #include <unistd.h>
 #include <cstdlib>
+#include <cstring>
+#include "Server.hpp"
 
 class Server
 {
@@ -25,6 +29,15 @@ class Server
 		~Server();
 		
 		void	loop();
+
+		// exception to throw when a function sets errno on failure
+		class	errnoException: public std::exception
+		{
+			virtual const char	*what() const throw()
+			{
+				return (strerror(errno));
+			}
+		};
 
 	private:
 		Server();

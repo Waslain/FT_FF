@@ -24,8 +24,10 @@ SRCS_PATH	= ./srcs/
 OBJS_PATH	= ./objs/
 
 # Files
+INCL		=	Server.hpp
 SRCS		=	main.cpp	\
 				Server.cpp
+INCL		:= $(addprefix $(INCL_PATH), $(INCL))
 SRCS		:= $(addprefix $(SRCS_PATH), $(SRCS))
 OBJS		:= $(subst $(SRCS_PATH), $(OBJS_PATH), $(SRCS:.cpp=.o))
 DEPS		:= $(OBJS:.o=.d)
@@ -73,7 +75,7 @@ fclean	: clean
 re		: fclean all
 
 # Rules for .o files
-$(OBJS_PATH)%.o : $(SRCS_PATH)%.cpp
+$(OBJS_PATH)%.o : $(SRCS_PATH)%.cpp $(INCL)
 		@mkdir -p $(@D)
 		@$(CC) $(CFLAGS) -c $< -o $@
 		@$(call percentage)
