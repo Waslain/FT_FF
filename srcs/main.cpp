@@ -22,11 +22,12 @@ int main(int argc, char const *argv[])
 
 	try
 	{
-		Server	server(atoi(argv[1]), std::string(argv[2]));
+		Server	server(argv[1], argv[2]);
 		server.loop();
 	}
 	catch (std::exception &e) {
-		std::cerr <<  "Error: " << e.what() << std::endl;
+		if (e.what())
+			std::cerr <<  "Error: " << e.what() << std::endl;
 	}
 
 	return (1);

@@ -12,34 +12,61 @@
 
 #include "Server.hpp"
 
-Server::Server(int port, std::string password)
+void	Server::_getSocket()
 {
-	// create a stream socket
-	this->_socket = socket(AF_INET, SOCK_STREAM, 0);
-	if (this->_socket < 0) {
-		throw (Server::errnoException());
+	int				status;
+	struct addrinfo	hints;
+	struct addrinfo	*res;
+	struct addrinfo *p;
+
+	memset(&hints, 0, sizeof(hints));
+	hints.ai_family = AF_UNSPEC;
+	hints.ai_socktype = SOCK_STREAM;
+	hints.ai_protocol = getprotobyname("TCP")->p_proto;
+	hints.ai_flags = AI_PASSIVE;
+
+	status = getaddrinfo(NULL, this->_port.c_str(), &hints, &res);
+	if (status != 0)
+	{
+		std::cerr << gai_strerror(status) << std::endl;
+		throw (emptyException());
 	}
 
-	// create an address
-	this->_address.sin_family = AF_INET;
-	this->_address.sin_port = htons(port);
-	if (inet_pton(AF_INET, "127.0.0.0",  &(this->_address.sin_addr)) < 0) {
-		throw (Server::errnoException());
+	for (p = res; p != NULL; p = p->ai_next)
+	{
+		this->_socket = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
+		if (this->_socket < 0)
+		{
+			std::cerr << "socket error" << std::endl;
+			continue ;
+		}
+		if (bind(this->_socket, p->ai_addr, p->ai_addrlen) < 0)
+		{
+			std::cerr << "bind error" << std::endl;
+			close(this->_socket);
+			continue ;
+		}
+
+		break ;
 	}
 
-	for (size_t i = 0; i < 8; i++) {
-		this->_address.sin_zero[i] = 0;
+		char	ipstr[INET6_ADDRSTRLEN];
+		inet_ntop(p->ai_family, p->ai_addr, ipstr, sizeof (ipstr));
+		std::cout << ipstr << std::endl;
+
+	if (p == NULL)
+	{
+		std::cerr << strerror(errno) << std::endl;
+		throw (emptyException());
 	}
-	
-	// code to print the ip address
-	char	ip4[INET_ADDRSTRLEN];
-	inet_ntop(AF_INET, &(this->_address.sin_addr), ip4, INET_ADDRSTRLEN);
-	std::cout << ip4 << std::endl;
 
-	// bind address to the socket
-	bind(this->_socket, reinterpret_cast<struct sockaddr*>(&this->_address), sizeof(this->_address));
+	freeaddrinfo(res);
+}
 
-	this->_pass = password;
+Server::Server(std::string port, std::string password): _pass(password)
+{
+	this->_port = port;
+	_getSocket();
 }
 
 Server::~Server()
