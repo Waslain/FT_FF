@@ -23,7 +23,7 @@ int main(int argc, char const *argv[])
 	try
 	{
 		Server	server(argv[1], argv[2]);
-		server.loop();
+		//server.loop();
 	}
 	catch (std::exception &e) {
 		if (e.what())
