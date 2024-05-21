@@ -24,7 +24,8 @@ SRCS_PATH	= ./srcs/
 OBJS_PATH	= ./objs/
 
 # Files
-INCL		=	Server.hpp
+INCL		=	Server.hpp	\
+				Message.hpp
 SRCS		=	main.cpp	\
 				Server.cpp
 INCL		:= $(addprefix $(INCL_PATH), $(INCL))
