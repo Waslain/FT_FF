@@ -15,12 +15,22 @@
 #include <iostream>
 #include <errno.h>
 #include <sys/socket.h>
+#include <sys/signalfd.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#include <poll.h>
 #include <unistd.h>
+#include <signal.h>
 #include <cstdlib>
 #include <cstring>
+#include <map>
+#include <vector>
+#include "Client.hpp"
+
+extern bool	run;
+
+class Client;
 
 class Server
 {
@@ -35,20 +45,19 @@ class Server
 		Server(const Server &copy);
 		Server &operator=(const Server &src);
 
-		std::string _pass;
-		std::string	_host;
-		std::string	_port;
-		int 		_socket;
-		sockaddr_in _address;
+		std::string				 _pass;
+		std::string				_host;
+		int 					_socket;
+		std::vector<pollfd>		_pfds;
+		std::map<int, Client>	users;
 
-		void	_getSocket();
+		void	_getSocket(std::string const &);
 };
 
 class	emptyException: public std::exception
 {
 	public:
-		virtual const char	*what() const throw()
-		{
+		virtual const char	*what() const throw() {
 			return (NULL);
 		}
 };

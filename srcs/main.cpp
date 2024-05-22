@@ -12,6 +12,23 @@
 
 #include "Server.hpp"
 
+bool	run = true;
+
+void	sigintHandler(int signal)
+{
+	if (signal == SIGINT) {
+		run = false;
+	}
+}
+
+void	setSignalAction()
+{
+	struct sigaction	act;
+	bzero(&act, sizeof(act));
+	act.sa_handler = &sigintHandler;
+	sigaction(SIGINT, &act, NULL);
+}
+
 int main(int argc, char const *argv[])
 {
 	if (argc != 3)
@@ -20,10 +37,12 @@ int main(int argc, char const *argv[])
 		return (1);
 	}
 
+	setSignalAction();
+
 	try
 	{
 		Server	server(argv[1], argv[2]);
-		//server.loop();
+		server.loop();
 	}
 	catch (std::exception &e) {
 		if (e.what())
