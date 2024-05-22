@@ -67,6 +67,13 @@ void	Server::_getSocket(std::string const &port)
 		throw (emptyException());
 	}
 
+	// set the socket as non blocking
+	if (fcntl(this->_socket, F_SETFL, O_NONBLOCK) < 0)
+	{
+		std::cout << "Error: " << strerror(errno) << std::endl;
+		throw (emptyException());
+	}
+
 	pollfd	pfd;
 	pfd.fd = this->_socket;
 	pfd.events = POLLIN;
