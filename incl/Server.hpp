@@ -21,6 +21,7 @@
 #include <netdb.h>
 #include <poll.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include <signal.h>
 #include <cstdlib>
 #include <cstring>
@@ -54,6 +55,7 @@ class Server
 		void	_getSocket(std::string const &);
 		void	_checkEvents(size_t const &i);
 		void	_acceptClient();
+		void	_receiveMessage(int const &fd);
 };
 
 class	emptyException: public std::exception

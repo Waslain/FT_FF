@@ -1,10 +1,19 @@
 #include "Server.hpp"
 
+void	Server::_receiveMessage(int const &fd)
+{
+	char	buf[1024] = {0};
+
+	recv(fd, buf, 1024, 0);
+
+	std::cout << buf << std::endl;
+}
+
 void	Server::_checkEvents(size_t const &i)
 {
 	// when client sends
-	if (this->_pfds[i].revents & POLLIN)
-	{
+	if (this->_pfds[i].revents & POLLIN) {
+		Server::_receiveMessage(this->_pfds[i].fd);
 	}
 
 	// when client is ready to receive
@@ -35,6 +44,13 @@ void	Server::_acceptClient()
 	// accept the connection, creating a new fd for the client
 	pfd.fd = accept(this->_pfds[0].fd, NULL, NULL);
 	if (pfd.fd < 0)
+	{
+		std::cout << "Error: " << strerror(errno) << std::endl;
+		throw (emptyException());
+	}
+
+	// set the fd as non blocking
+	if (fcntl(pfd.fd, F_SETFL, O_NONBLOCK) < 0)
 	{
 		std::cout << "Error: " << strerror(errno) << std::endl;
 		throw (emptyException());
