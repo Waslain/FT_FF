@@ -51,9 +51,11 @@ void	Server::_getSocket(std::string const &port)
 	}
 
 	// print the address
+	/*
 	char	ipstr[INET6_ADDRSTRLEN];
 	inet_ntop(p->ai_family, p->ai_addr, ipstr, sizeof (ipstr));
 	std::cout << ipstr << std::endl;
+	*/
 
 	// free the addrinfo list
 	freeaddrinfo(res);
