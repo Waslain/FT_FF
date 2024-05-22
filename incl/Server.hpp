@@ -52,6 +52,8 @@ class Server
 		std::map<int, Client>	users;
 
 		void	_getSocket(std::string const &);
+		void	_checkEvents(size_t const &i);
+		void	_acceptClient();
 };
 
 class	emptyException: public std::exception
