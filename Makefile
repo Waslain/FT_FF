@@ -25,9 +25,12 @@ OBJS_PATH	= ./objs/
 
 # Files
 INCL		=	Server.hpp	\
-				Message.hpp
+				Message.hpp	\
+				Client.hpp
 SRCS		=	main.cpp	\
-				Server.cpp
+				Server.cpp	\
+				loop.cpp	\
+				socket.cpp
 INCL		:= $(addprefix $(INCL_PATH), $(INCL))
 SRCS		:= $(addprefix $(SRCS_PATH), $(SRCS))
 OBJS		:= $(subst $(SRCS_PATH), $(OBJS_PATH), $(SRCS:.cpp=.o))
@@ -57,7 +60,7 @@ $(NAME)	: $(OBJS)
 	@echo $(BANNER)
 
 leak	: $(NAME)
-	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(NAME)
+	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(NAME) 8080 pass
 
 exec	: $(NAME) clean
 	./$(NAME)
