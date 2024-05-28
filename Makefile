@@ -30,7 +30,8 @@ INCL		=	Server.hpp	\
 SRCS		=	main.cpp	\
 				Server.cpp	\
 				loop.cpp	\
-				socket.cpp
+				socket.cpp	\
+				message.cpp
 INCL		:= $(addprefix $(INCL_PATH), $(INCL))
 SRCS		:= $(addprefix $(SRCS_PATH), $(SRCS))
 OBJS		:= $(subst $(SRCS_PATH), $(OBJS_PATH), $(SRCS:.cpp=.o))
