@@ -1,0 +1,6 @@
+*.o
+*.d
+./objs/
+.vscode/settings.json
+ircserv
+
