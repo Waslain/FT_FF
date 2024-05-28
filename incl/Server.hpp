@@ -6,7 +6,7 @@
 /*   By: fduzant <fduzant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 19:26:42 by fduzant           #+#    #+#             */
-/*   Updated: 2024/05/27 18:36:59 by fduzant          ###   ########.fr       */
+/*   Updated: 2024/05/28 19:21:21 by fduzant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,11 @@
 #include <vector>
 #include "Client.hpp"
 #include <algorithm>
+#include <sstream>
+
+#ifndef DEBUG
+# define DEBUG 0
+#endif
 
 extern bool	run;
 
