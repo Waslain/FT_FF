@@ -6,7 +6,7 @@
 /*   By: fduzant <fduzant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 19:26:47 by fduzant           #+#    #+#             */
-/*   Updated: 2024/05/28 19:27:17 by fduzant          ###   ########.fr       */
+/*   Updated: 2024/05/28 19:57:57 by fduzant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,12 @@ static void PrintVectArgs(std::vector<T> args)
 
 void Server::parseInput(std::string str)
 {
+	if (str.empty())
+	{
+		if (DEBUG == 1)
+			std::cerr << "Received empty string" << std::endl;
+		return ;
+	}
 	std::cout << "Received: " << str << std::endl;
 	str.erase(std::remove(str.begin(), str.end(), '\n'), str.end());
 	

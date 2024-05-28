@@ -48,7 +48,7 @@ endef
 
 # Compilator
 CC			= c++
-CFLAGS		= -I $(INCL_PATH) -Wall -Wextra -Werror -std=c++98 -D DEBUG=$(DEBUG)
+CFLAGS		= -I $(INCL_PATH) -Wall -Wextra -Werror -std=c++98 -D DEBUG=$(DEBUG) -g3
 CDEBUGFLAGS		= -g3 -D DEBUG=1
 
 
@@ -61,15 +61,16 @@ $(NAME)	: $(OBJS)
 	@echo "\n\t$(GREEN)$(NAME) created ! 🤖$(RESET)"
 	@echo $(BANNER)
 
-leak	: $(NAME)
+leak	: DEBUG = 0
+leak	: fclean $(NAME) clean
 	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(NAME) 8080 pass
 
 debug	: DEBUG = 1
-debug	: $(NAME)
+debug	: fclean $(NAME) clean
 	./$(NAME) 8080 pass
 	
 exec	: DEBUG = 0
-exec	: $(NAME) clean
+exec	: fclean $(NAME) clean
 	./$(NAME) 8080 pass
 
 no_env	: $(NAME)
