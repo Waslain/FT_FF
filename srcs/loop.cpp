@@ -6,7 +6,9 @@ void	Server::_receiveMessage(int const &fd)
 
 	recv(fd, buf, 1024, 0);
 
-	std::cout << buf << std::endl;
+	std::string msg = buf;
+	parseInput(msg);
+	// std::cout << buf << std::endl;
 }
 
 void	Server::_checkEvents(size_t const &i)
