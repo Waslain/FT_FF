@@ -4,11 +4,24 @@ void	Server::_receiveMessage(int const &fd)
 {
 	char	buf[1024] = {0};
 
-	recv(fd, buf, 1024, 0);
+	if (recv(fd, buf, 1024, 0) < 0) {
+	}
 
-	std::string msg = buf;
-	parseInput(msg);
-	// std::cout << buf << std::endl;
+	std::string	s(buf);
+	std::string	msg;
+	size_t		pos = 0;
+
+	while (true)
+	{
+		pos = s.find("\r\n");
+		if (pos == std::string::npos) {
+			break ;
+		}
+		msg = s.substr(0, pos);
+		s.erase(0, pos + 2);
+		parseInput(msg);
+	}
+
 }
 
 void	Server::_checkEvents(size_t const &i)
