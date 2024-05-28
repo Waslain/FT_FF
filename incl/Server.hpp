@@ -59,9 +59,12 @@ class Server
 		std::vector<pollfd>		_pfds;
 		std::map<int, Client>	users;
 		
-		std::map<std::string, void(*)(int const &, std::vector<std::string> &)> _cmdmap;
-		void _initCmdMap();
+		std::map<std::string, void(Server::*)(int const &, std::vector<std::string> &)> _cmdmap;
 
+		void	_PASS(int const &fd, std::vector<std::string> &args);
+		void	_CAP(int const &fd, std::vector<std::string> &args);
+
+		void 	_initCmdMap();
 		void	_getSocket(std::string const &);
 		void	_checkEvents(size_t const &i);
 		void	_acceptClient();

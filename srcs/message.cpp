@@ -1,17 +1,48 @@
 #include "Server.hpp"
 
-void PrintTestFunction(int const &fd, std::vector<std::string>	&args)
+std::string	joinArgs(std::vector<std::string>::iterator it, std::vector<std::string>::iterator end)
 {
-	std::cout << "Test function called" << std::endl;
+	std::string	str = "";
+
+	if (it == end) {
+		return (str);
+	}
+
+	while (true)
+	{
+		str += *it;
+		if (it + 1 == end) {
+			break ;
+		}
+		str += " ";
+		it++;
+	}
+	return (str);
+}
+
+void	Server::_PASS(int const &fd, std::vector<std::string> &args)
+{
 	(void)fd;
-	(void)args;
+
+	std::string	pass = joinArgs(args.begin(), args.end());
+	if (DEBUG) {
+		std::cout << "password received: " << pass << std::endl;
+	}
+	if (pass == this->_pass) {
+		std::cout << "password correct" << std::endl;
+	}
+}
+
+void	Server::_CAP(int const &fd, std::vector<std::string> &args)
+{
+	static_cast<void>(fd);
+	static_cast<void>(args);
 }
 
 void Server::_initCmdMap()
 {
-	// std::string cmd = "TEST";
-	// _cmdmap[cmd] = &PrintTestFunction;
-	_cmdmap["TEST"] = &PrintTestFunction;
+	_cmdmap["PASS"] = &Server::_PASS;
+	_cmdmap["CAP"] = &Server::_CAP;
 }
 
 template <typename T>
@@ -34,14 +65,19 @@ void Server::parseInput(std::string &str, int const &fd)
 
 	std::string s;
 	std::stringstream ss(str);
+
+	std::string	cmd;
+	if (getline(ss, s, ' ')) {
+		cmd = s;
+	}
+
 	std::vector<std::string> args;
-	while (getline(ss, s, ' '))
-	{
+	while (getline(ss, s, ' ')) {
 		args.push_back(s);
 	}
 	//print args if DEBUG
 	if (DEBUG == 1)
 		PrintVectArgs(args);
-	if (_cmdmap[args[0]] != NULL)
-		_cmdmap[args[0]](fd, args);
+	if (_cmdmap[cmd] != NULL)
+		(*this.*_cmdmap[cmd])(fd, args);
 }
