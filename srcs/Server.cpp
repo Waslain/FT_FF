@@ -27,7 +27,6 @@ void Server::_initCmdMap()
 void Server::parseInput(std::string str)
 {
 	std::cout << "Received: " << str << std::endl;
-	str.erase(std::remove(str.begin(), str.end(), '\n'), str.end());
 	if (_cmdmap[str] != NULL)
 		_cmdmap[str]();
 }
