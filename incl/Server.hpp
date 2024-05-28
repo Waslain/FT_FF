@@ -6,7 +6,7 @@
 /*   By: fduzant <fduzant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 19:26:42 by fduzant           #+#    #+#             */
-/*   Updated: 2024/05/16 19:28:14 by fduzant          ###   ########.fr       */
+/*   Updated: 2024/05/27 18:36:59 by fduzant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 #include <map>
 #include <vector>
 #include "Client.hpp"
+#include <algorithm>
 
 extern bool	run;
 
@@ -40,7 +41,7 @@ class Server
 		~Server();
 		
 		void	loop();
-
+		void parseInput(std::string str);
 	private:
 		Server();
 		Server(const Server &copy);
@@ -51,6 +52,9 @@ class Server
 		int 					_socket;
 		std::vector<pollfd>		_pfds;
 		std::map<int, Client>	users;
+		
+		std::map<std::string, void(*)()> _cmdmap;
+		void _initCmdMap();
 
 		void	_getSocket(std::string const &);
 		void	_checkEvents(size_t const &i);
