@@ -19,7 +19,7 @@ void	Server::_receiveMessage(int const &fd)
 		}
 		msg = s.substr(0, pos);
 		s.erase(0, pos + 2);
-		parseInput(msg);
+		parseInput(msg, fd);
 	}
 
 }

@@ -1,8 +1,10 @@
 #include "Server.hpp"
 
-void PrintTestFunction()
+void PrintTestFunction(int const &fd, std::vector<std::string>	&args)
 {
 	std::cout << "Test function called" << std::endl;
+	(void)fd;
+	(void)args;
 }
 
 void Server::_initCmdMap()
@@ -19,7 +21,7 @@ static void PrintVectArgs(std::vector<T> args)
 		std::cout << "Arg " << i << ": " << args[i] << std::endl;
 }
 
-void Server::parseInput(std::string str)
+void Server::parseInput(std::string &str, int const &fd)
 {
 	if (str.empty())
 	{
@@ -41,5 +43,5 @@ void Server::parseInput(std::string str)
 	if (DEBUG == 1)
 		PrintVectArgs(args);
 	if (_cmdmap[args[0]] != NULL)
-		_cmdmap[args[0]]();
+		_cmdmap[args[0]](fd, args);
 }

@@ -46,7 +46,8 @@ class Server
 		~Server();
 		
 		void	loop();
-		void parseInput(std::string str);
+		void 	parseInput(std::string &str, int const &);
+
 	private:
 		Server();
 		Server(const Server &copy);
@@ -58,7 +59,7 @@ class Server
 		std::vector<pollfd>		_pfds;
 		std::map<int, Client>	users;
 		
-		std::map<std::string, void(*)()> _cmdmap;
+		std::map<std::string, void(*)(int const &, std::vector<std::string> &)> _cmdmap;
 		void _initCmdMap();
 
 		void	_getSocket(std::string const &);
