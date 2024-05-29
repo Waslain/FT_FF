@@ -24,14 +24,19 @@ SRCS_PATH	= ./srcs/
 OBJS_PATH	= ./objs/
 
 # Files
-INCL		=	Server.hpp	\
-				Message.hpp	\
-				Client.hpp
-SRCS		=	main.cpp	\
-				Server.cpp	\
-				loop.cpp	\
-				socket.cpp	\
-				message.cpp
+INCL		=	Server.hpp			\
+				Message.hpp			\
+				User.hpp
+SRCS		=	main.cpp			\
+				Server.cpp			\
+				User.cpp			\
+				loop.cpp			\
+				socket.cpp			\
+				message.cpp			\
+				$(addprefix cmd/,	\
+				PASS.cpp			\
+				CAP.cpp				\
+				)
 INCL		:= $(addprefix $(INCL_PATH), $(INCL))
 SRCS		:= $(addprefix $(SRCS_PATH), $(SRCS))
 OBJS		:= $(subst $(SRCS_PATH), $(OBJS_PATH), $(SRCS:.cpp=.o))

@@ -18,7 +18,7 @@ void	Server::_getSocket(std::string const &port)
 	if (status != 0)
 	{
 		std::cerr << gai_strerror(status) << std::endl;
-		throw (emptyException());
+		throw ;
 	}
 
 	// iterate through the list of addresses
@@ -47,7 +47,7 @@ void	Server::_getSocket(std::string const &port)
 	if (p == NULL)
 	{
 		std::cerr << "Error: " << strerror(errno) << std::endl;
-		throw (emptyException());
+		throw ;
 	}
 
 	// print the address
@@ -64,14 +64,14 @@ void	Server::_getSocket(std::string const &port)
 	if (listen(this->_socket, 10) < 0)
 	{
 		std::cerr << "Error: " << strerror(errno) << std::endl;
-		throw (emptyException());
+		throw ;
 	}
 
 	// set the socket as non blocking
 	if (fcntl(this->_socket, F_SETFL, O_NONBLOCK) < 0)
 	{
 		std::cout << "Error: " << strerror(errno) << std::endl;
-		throw (emptyException());
+		throw ;
 	}
 
 	pollfd	pfd;

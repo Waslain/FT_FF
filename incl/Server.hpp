@@ -27,9 +27,11 @@
 #include <cstring>
 #include <map>
 #include <vector>
-#include "Client.hpp"
 #include <algorithm>
 #include <sstream>
+
+#include "User.hpp"
+#include "Message.hpp"
 
 #ifndef DEBUG
 # define DEBUG 0
@@ -37,7 +39,7 @@
 
 extern bool	run;
 
-class Client;
+class User;
 
 class Server
 {
@@ -49,16 +51,18 @@ class Server
 		void 	parseInput(std::string &str, int const &);
 
 	private:
+	
 		Server();
 		Server(const Server &copy);
 		Server &operator=(const Server &src);
+
+		typedef std::map<int, User>::iterator	userIt;
 
 		std::string				 _pass;
 		std::string				_host;
 		int 					_socket;
 		std::vector<pollfd>		_pfds;
-		std::map<int, Client>	users;
-		
+		std::map<int, User>		_users;
 		std::map<std::string, void(Server::*)(int const &, std::vector<std::string> &)> _cmdmap;
 
 		void	_PASS(int const &fd, std::vector<std::string> &args);
@@ -68,14 +72,8 @@ class Server
 		void	_getSocket(std::string const &);
 		void	_checkEvents(size_t const &i);
 		void	_acceptClient();
+		void	_deleteClient(size_t const &i);
 		void	_receiveMessage(int const &fd);
+		void	_sendMessage(int &fd);
+		void	_addClientMessage(User &user, std::string const &msg);
 };
-
-class	emptyException: public std::exception
-{
-	public:
-		virtual const char	*what() const throw() {
-			return (NULL);
-		}
-};
-

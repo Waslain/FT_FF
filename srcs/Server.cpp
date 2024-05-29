@@ -12,6 +12,12 @@
 
 #include "Server.hpp"
 
+void Server::_initCmdMap()
+{
+	_cmdmap["CAP"] = &Server::_CAP;
+	_cmdmap["PASS"] = &Server::_PASS;
+}
+
 Server::Server(std::string port, std::string password): _pass(password)
 {
 	_initCmdMap();
@@ -26,4 +32,10 @@ Server::~Server()
 	for (; it < ite; it++) {
 		close(it->fd);
 	}
+}
+
+void	Server::_addClientMessage(User &user, std::string const &msg)
+{
+	std::string	tmp = user.getSendBuf() + msg;
+	user.setSendBuf(tmp);
 }

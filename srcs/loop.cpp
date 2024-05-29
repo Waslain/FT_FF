@@ -5,9 +5,11 @@ void	Server::_receiveMessage(int const &fd)
 	char	buf[1024] = {0};
 
 	if (recv(fd, buf, 1024, 0) < 0) {
+		std::cout << "recv error" << std::endl;
+		return ;
 	}
 
-	std::string	s(buf);
+	std::string	s = this->_users[fd].getRecvBuf() + buf;
 	std::string	msg;
 	size_t		pos = 0;
 
@@ -21,34 +23,30 @@ void	Server::_receiveMessage(int const &fd)
 		s.erase(0, pos + 2);
 		parseInput(msg, fd);
 	}
-
+	this->_users[fd].setRecvBuf(s);
 }
 
-void	Server::_checkEvents(size_t const &i)
+void	Server::_sendMessage(int &fd)
 {
-	// when client sends
-	if (this->_pfds[i].revents & POLLIN) {
-		Server::_receiveMessage(this->_pfds[i].fd);
-	}
+	std::string	msg = this->_users[fd].getSendBuf();
+	char const	*buf = msg.c_str();
+	size_t		len = msg.size();
 
-	// when client is ready to receive
-	if (this->_pfds[i].revents & POLLOUT)
-	{
+	if (send(fd, buf, len, 0) < 1) {
+		std::cout << "send error" << std::endl;
+		return ;
 	}
+	std::cout << "sent: " << msg << std::flush;
+	this->_users[fd].setSendBuf("");
+}
 
-	// not sure about this one
-	if (this->_pfds[i].revents & POLLERR)
-	{
-	}
-
-	// if the client is closed -> close his fd and remove it from pfds
-	if (this->_pfds[i].revents & POLLRDHUP)
-	{
-		std::cout << "Client " << this->_pfds[i].fd << " disconnected" << std::endl;
-		close(this->_pfds[i].fd);
-		std::vector<pollfd>::iterator	it = this->_pfds.begin();
-		this->_pfds.erase(it + i);
-	}
+void	Server::_deleteClient(size_t const &i)
+{
+	std::cout << "Client " << this->_pfds[i].fd << " disconnected" << std::endl;
+	close(this->_pfds[i].fd);
+	std::vector<pollfd>::iterator	it = this->_pfds.begin();
+	this->_users.erase(this->_users.find(this->_pfds[i].fd));
+	this->_pfds.erase(it + i);
 }
 
 void	Server::_acceptClient()
@@ -61,14 +59,14 @@ void	Server::_acceptClient()
 	if (pfd.fd < 0)
 	{
 		std::cout << "Error: " << strerror(errno) << std::endl;
-		throw (emptyException());
+		throw ;
 	}
 
 	// set the fd as non blocking
 	if (fcntl(pfd.fd, F_SETFL, O_NONBLOCK) < 0)
 	{
 		std::cout << "Error: " << strerror(errno) << std::endl;
-		throw (emptyException());
+		throw ;
 	}
 
 	std::cout << "New client connected, fd = " << pfd.fd << std::endl;
@@ -77,8 +75,36 @@ void	Server::_acceptClient()
 	// not sure that i need all of these
 	pfd.events = POLLIN | POLLOUT | POLLERR | POLLRDHUP | POLLHUP;
 	this->_pfds.push_back(pfd);
+
+	// create a new user
+	this->_users[pfd.fd] = User();
 }
 
+void	Server::_checkEvents(size_t const &i)
+{
+	int		&fd = this->_pfds[i].fd;
+	User	&user = this->_users[fd];
+
+	// when client sends
+	if (this->_pfds[i].revents & POLLIN) {
+		Server::_receiveMessage(fd);
+	}
+
+	// when client is ready to receive
+	if (this->_pfds[i].revents & POLLOUT && !user.getSendBuf().empty()) {
+		Server::_sendMessage(fd);
+	}
+
+	// not sure about this one
+	if (this->_pfds[i].revents & POLLERR) {
+		std::cout << "POLLERR" << std::endl;
+	}
+
+	// if the client is closed -> close his fd and remove it from pfds
+	if (this->_pfds[i].revents & POLLRDHUP) {
+		Server::_deleteClient(i);
+	}
+}
 void	Server::loop()
 {
 	while (true)
