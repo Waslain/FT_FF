@@ -63,10 +63,10 @@ class Server
 		int 					_socket;
 		std::vector<pollfd>		_pfds;
 		std::map<int, User>		_users;
-		std::map<std::string, void(Server::*)(int const &, std::vector<std::string> &)> _cmdmap;
+		std::map<std::string, void(Server::*)(int const &, std::string &)> _cmdmap;
 
-		void	_PASS(int const &fd, std::vector<std::string> &args);
-		void	_CAP(int const &fd, std::vector<std::string> &args);
+		void	_PASS(int const &fd, std::string &args);
+		void	_CAP(int const &fd, std::string &args);
 
 		void 	_initCmdMap();
 		void	_getSocket(std::string const &);
@@ -77,3 +77,5 @@ class Server
 		void	_sendMessage(int &fd);
 		void	_addClientMessage(User &user, std::string const &msg);
 };
+
+std::string	getFirstWord(std::string &str);
