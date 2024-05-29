@@ -10,6 +10,35 @@ static bool is_valid_not_alnum_char(char c)
 	return (c == '[' || c == ']' || c == '\\' || c == '{' || c == '}' || c == '|');
 }
 
+static bool is_valid_nick(std::string nick)
+{
+	for (int i = 0; nick[i]; i++)
+	{
+		if (!is_alnum(nick[i]))
+		{
+			if (!is_valid_not_alnum_char(nick[i]))
+			{
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+bool	Server::nick_already_in_use(std::string nick)
+{
+	for (userIt it = _users.begin(); it != _users.end(); it++)
+	{
+		if (it->second.getNickname() == nick)
+		{
+			if (DEBUG)
+				std::cout << "Nickname already in use by user " << it->first << std::endl;
+			return false;
+		}
+	}
+	return true;
+}
+
 void	Server::_NICK(int const &fd, std::string &args)
 {
 	User	&user = this->_users[fd];
@@ -23,29 +52,16 @@ void	Server::_NICK(int const &fd, std::string &args)
 		return ;
 	}
 	//Check if args is alphanum
-	for (int i = 0; args[i]; i++)
+	if (!is_valid_nick(args))
 	{
-		if (!is_alnum(args[i]))
-		{
-			if (!is_valid_not_alnum_char(args[i]))
-			{
-				_addClientMessage(user, ERR_ERRONEUSNICKNAME(user));
-				return ;
-			}
-		}
-	}	
-	userIt it = this->_users.begin();
-	userIt ite = this->_users.end();
-	while (it != ite)
+		_addClientMessage(user, ERR_ERRONEUSNICKNAME(user));
+		return ;
+	}
+	//Check if nickname is already in use
+	if (!nick_already_in_use(args))
 	{
-		if (it->second.getNickname() == args)
-		{
-			if (DEBUG)
-				std::cout << "Nickname already in use by user " << it->first << std::endl;
-			_addClientMessage(user, ERR_NICKNAMEINUSE(user));
-			return ;
-		}
-		it++;
+		_addClientMessage(user, ERR_NICKNAMEINUSE(user));
+		return ;
 	}
 	user.setNickname(args);
 }
