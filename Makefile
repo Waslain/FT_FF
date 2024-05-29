@@ -36,6 +36,7 @@ SRCS		=	main.cpp			\
 				$(addprefix cmd/,	\
 				PASS.cpp			\
 				CAP.cpp				\
+				NICK.cpp			\
 				)
 INCL		:= $(addprefix $(INCL_PATH), $(INCL))
 SRCS		:= $(addprefix $(SRCS_PATH), $(SRCS))

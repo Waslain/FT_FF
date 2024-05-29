@@ -6,7 +6,7 @@
 /*   By: fduzant <fduzant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 19:26:42 by fduzant           #+#    #+#             */
-/*   Updated: 2024/05/28 19:21:21 by fduzant          ###   ########.fr       */
+/*   Updated: 2024/05/29 14:54:02 by fduzant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ class Server
 
 		void	_PASS(int const &fd, std::string &args);
 		void	_CAP(int const &fd, std::string &args);
+		void	_NICK(int const &fd, std::string &args);
 
 		void 	_initCmdMap();
 		void	_getSocket(std::string const &);
