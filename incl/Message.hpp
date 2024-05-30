@@ -4,6 +4,7 @@
 
 #define VERSION "ft_ff-1.0"
 #define HOSTNAME "ft_ff"
+#define USERLEN 20
 #define	USERMODES "i"
 #define	CHANMODES ""
 
@@ -24,6 +25,9 @@ std::string(BASE(user, "003") + ":This server was created " + date + RN)
 
 #define RPL_MYINFO(user) \
 std::string(BASE(user, "004") + HOSTNAME + " " + VERSION + " " + USERMODES + " " + CHANMODES + RN)
+
+#define RPL_ISUPPORT(user) \
+std::string(BASE(user, "005") + ":are supported by this server" + RN)
 
 #define ERR_NONICKNAMEGIVEN(user) \
 std::string(BASE(user, "431") + " :No nickname given" + RN)
@@ -48,3 +52,6 @@ std::string(BASE(user, "464") + " :Password incorrect" + RN)
 
 #define	ERROR(msg) \
 std::string(std::string("ERROR :") + msg + RN)
+
+#define PONG(msg) \
+std::string(std::string("PONG ") + HOSTNAME + " " + msg + RN)

@@ -40,6 +40,7 @@ SRCS		=	main.cpp			\
 				NICK.cpp			\
 				USER.cpp			\
 				PING.cpp			\
+				QUIT.cpp			\
 				)
 INCL		:= $(addprefix $(INCL_PATH), $(INCL))
 SRCS		:= $(addprefix $(SRCS_PATH), $(SRCS))

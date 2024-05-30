@@ -19,6 +19,7 @@ void Server::_initCmdMap()
 	_cmdmap["NICK"] = &Server::_NICK;
 	_cmdmap["USER"] = &Server::_USER;
 	_cmdmap["PING"] = &Server::_PING;
+	_cmdmap["QUIT"] = &Server::_QUIT;
 }
 
 Server::Server(std::string port, std::string password): _pass(password), _time(time(NULL))

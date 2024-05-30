@@ -12,4 +12,5 @@ void	Server::_PING(int const &fd, std::string &args)
 		_addClientMessage(user, ERR_NEEDMOREPARAMS(user, "PING"));
 		return ;
 	}
+	_addClientMessage(user, PONG(args));
 }
