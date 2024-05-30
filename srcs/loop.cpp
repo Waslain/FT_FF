@@ -9,6 +9,8 @@ void	Server::_receiveMessage(int const &fd)
 		return ;
 	}
 
+	std::cout << "Received from " << fd << ": " << buf << std::endl;
+
 	std::string	s = this->_users[fd].getRecvBuf() + buf;
 	std::string	msg;
 	size_t		pos = 0;
@@ -36,7 +38,7 @@ void	Server::_sendMessage(int &fd)
 		std::cout << "Error: send: " << strerror(errno) << std::endl;
 		return ;
 	}
-	std::cout << "sent: " << msg << std::flush;
+	std::cout << "sent to " << fd <<  ": " << msg << std::flush;
 	this->_users[fd].setSendBuf("");
 }
 
@@ -49,7 +51,7 @@ void	Server::_deleteClient(size_t const &i)
 	close(fd);
 	std::vector<pollfd>::iterator	it = this->_pfds.begin();
 	this->_pfds.erase(it + i);
-	this->_users.erase(this->_users.find(fd));
+	this->_users.erase(fd);
 }
 
 void	Server::_acceptClient()
