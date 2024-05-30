@@ -26,7 +26,8 @@ OBJS_PATH	= ./objs/
 # Files
 INCL		=	Server.hpp			\
 				Message.hpp			\
-				User.hpp
+				User.hpp			\
+				Channel.hpp
 SRCS		=	main.cpp			\
 				Server.cpp			\
 				User.cpp			\

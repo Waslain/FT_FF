@@ -32,6 +32,7 @@
 #include <time.h>
 
 #include "User.hpp"
+#include "Channel.hpp"
 #include "Message.hpp"
 
 #ifndef DEBUG
@@ -43,6 +44,7 @@
 extern bool	run;
 
 class User;
+class Channel;
 
 class Server
 {
@@ -61,12 +63,12 @@ class Server
 
 		typedef std::map<int, User>::iterator	userIt;
 
-		std::string				 _pass;
-		std::string				_host;
-		int 					_socket;
-		time_t					_time;
-		std::vector<pollfd>		_pfds;
-		std::map<int, User>		_users;
+		std::string				 		_pass;
+		std::string						_host;
+		int 							_socket;
+		time_t							_time;
+		std::vector<pollfd>				_pfds;
+		std::map<int, User>				_users;
 		std::map<std::string, void(Server::*)(int const &, std::string &)> _cmdmap;
 
 		void		_CAP(int const &fd, std::string &args);

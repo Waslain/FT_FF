@@ -24,8 +24,6 @@ std::string	getFirstWord(std::string &str)
 
 void Server::parseInput(std::string &str, int const &fd)
 {
-	std::cout << "Received: " << str << std::endl;
-
 	std::string	cmd = getFirstWord(str);
 	if (cmd.empty())
 	{
