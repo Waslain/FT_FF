@@ -2,7 +2,7 @@
 
 #include <string>
 
-#define VERSION "1.0"
+#define VERSION "ft_ff-1.0"
 #define HOSTNAME "ft_ff"
 #define	USERMODES ""
 #define	CHANMODES ""
@@ -14,7 +14,7 @@ std::string(std::string(":localhost ") + numeric + " " + (user.getNickname().emp
 
 
 #define RPL_WELCOME(user) \
-std::string(BASE(user, "001") + ":Welcome to the " + HOSTNAME + " network, !" + user.getUsername() + "@localhost" + RN)
+std::string(BASE(user, "001") + ":Welcome to " + HOSTNAME + ", " + user.getNickname() + RN)
 
 #define RPL_YOURHOST(user) \
 std::string(BASE(user, "002") + ":Your host is " + HOSTNAME + ", running version " + VERSION + RN)

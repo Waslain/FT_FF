@@ -61,7 +61,7 @@ std::string	Server::_getTime()
 	ss >> tmp;
 	str += ((tmp.size() == 1) ? "0" : "") + tmp + "-";
 	ss >> tmp;
-	str += tmp + " ";
+	str += tmp + " at ";
 	ss >> tmp;
 	str += ((tmp.size() == 1) ? "0" : "") + tmp + ":";
 	ss >> tmp;
