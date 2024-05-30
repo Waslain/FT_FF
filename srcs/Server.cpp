@@ -6,7 +6,7 @@
 /*   By: fduzant <fduzant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 19:26:47 by fduzant           #+#    #+#             */
-/*   Updated: 2024/05/29 14:53:53 by fduzant          ###   ########.fr       */
+/*   Updated: 2024/05/30 16:19:29 by fduzant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void Server::_initCmdMap()
 	_cmdmap["PASS"] = &Server::_PASS;
 	_cmdmap["NICK"] = &Server::_NICK;
 	_cmdmap["USER"] = &Server::_USER;
+	_cmdmap["PING"] = &Server::_PING;
 }
 
 Server::Server(std::string port, std::string password): _pass(password), _time(time(NULL))

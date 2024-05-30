@@ -6,7 +6,7 @@
 /*   By: fduzant <fduzant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 19:26:42 by fduzant           #+#    #+#             */
-/*   Updated: 2024/05/29 16:05:30 by fduzant          ###   ########.fr       */
+/*   Updated: 2024/05/30 16:19:42 by fduzant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ class Server
 		void		_PASS(int const &fd, std::string &args);
 		void		_NICK(int const &fd, std::string &args);
 		void		_USER(int const &fd, std::string &args);
+		void		_PING(int const &fd, std::string &args);
 
 		//UTILS
 		bool		nick_already_in_use(std::string nick);
