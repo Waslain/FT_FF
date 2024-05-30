@@ -24,6 +24,7 @@ User	&User::operator=(User const &cpy)
 	this->_username = cpy._username;
 	this->_password = cpy._password;
 	this->_registered = cpy._registered;
+	this->_disconnect = cpy._disconnect;
 	this->_time = cpy._time;
 	this->_mode = cpy._mode;
 	return (*this);

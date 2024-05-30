@@ -15,6 +15,7 @@ void	Server::_registerClient(User &user)
 	_addClientMessage(user, RPL_YOURHOST(user));
 	_addClientMessage(user, RPL_CREATED(user, _getTime()));
 	_addClientMessage(user, RPL_MYINFO(user));
+	_addClientMessage(user, RPL_ISUPPORT(user));
 }
 
 void	Server::_checkRegistration(int &fd)

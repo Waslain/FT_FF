@@ -39,7 +39,6 @@
 #endif
 
 #define TIMEOUT 20
-#define USERLEN 20
 
 extern bool	run;
 
@@ -75,6 +74,7 @@ class Server
 		void		_NICK(int const &fd, std::string &args);
 		void		_USER(int const &fd, std::string &args);
 		void		_PING(int const &fd, std::string &args);
+		void		_QUIT(int const &fd, std::string &args);
 
 		//UTILS
 		bool		nick_already_in_use(std::string nick);
