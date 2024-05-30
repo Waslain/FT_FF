@@ -4,7 +4,7 @@
 
 #define VERSION "ft_ff-1.0"
 #define HOSTNAME "ft_ff"
-#define	USERMODES ""
+#define	USERMODES "i"
 #define	CHANMODES ""
 
 #define RN "\r\n"

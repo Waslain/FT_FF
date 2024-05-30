@@ -1,7 +1,14 @@
 #include "User.hpp"
 
 User::User(): _time(time(NULL)),_registered(false), _disconnect(false)
-{}
+{
+	std::string	mode = USERMODES;
+	size_t		size = mode.size();
+
+	for (size_t i = 0; i < size; i++) {
+		this->_mode[mode[i]] = false;
+	}
+}
 
 User::User(User const &cpy)
 {
@@ -18,6 +25,7 @@ User	&User::operator=(User const &cpy)
 	this->_password = cpy._password;
 	this->_registered = cpy._registered;
 	this->_time = cpy._time;
+	this->_mode = cpy._mode;
 	return (*this);
 }
 
@@ -49,6 +57,11 @@ void	User::registerUser()
 void	User::setDisconnection()
 {
 	this->_disconnect = true;
+}
+
+void	User::setMode(char const &mode, bool const &value)
+{
+	this->_mode[mode] = value;
 }
 
 std::string	User::getNickname() const
@@ -104,4 +117,9 @@ time_t		User::getTime() const
 bool		User::disconnect() const
 {
 	return (this->_disconnect);
+}
+
+bool		User::getMode(char const &mode)
+{
+	return (this->_mode[mode]);
 }
