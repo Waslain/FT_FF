@@ -17,10 +17,5 @@ void	Server::_PASS(int const &fd, std::string &args)
 		_addClientMessage(user, ERR_NEEDMOREPARAMS(user, "PASS"));
 		return ;
 	}
-	if (args != this->_pass)
-	{
-		_addClientMessage(user, ERR_PASSWDMISMATCH(user));
-		return ;
-	}
 	user.setPassword(args);
 }

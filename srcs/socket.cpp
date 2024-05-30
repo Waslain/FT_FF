@@ -77,5 +77,6 @@ void	Server::_getSocket(std::string const &port)
 	pollfd	pfd;
 	pfd.fd = this->_socket;
 	pfd.events = POLLIN;
+	pfd.revents = 0;
 	this->_pfds.push_back(pfd);
 }

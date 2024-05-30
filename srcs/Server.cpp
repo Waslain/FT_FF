@@ -17,9 +17,10 @@ void Server::_initCmdMap()
 	_cmdmap["CAP"] = &Server::_CAP;
 	_cmdmap["PASS"] = &Server::_PASS;
 	_cmdmap["NICK"] = &Server::_NICK;
+	_cmdmap["USER"] = &Server::_USER;
 }
 
-Server::Server(std::string port, std::string password): _pass(password)
+Server::Server(std::string port, std::string password): _pass(password), _time(time(NULL))
 {
 	_initCmdMap();
 	_getSocket(port);
@@ -39,4 +40,32 @@ void	Server::_addClientMessage(User &user, std::string const &msg)
 {
 	std::string	tmp = user.getSendBuf() + msg;
 	user.setSendBuf(tmp);
+}
+
+std::string	Server::_getTime()
+{
+	std::string			str;
+	std::string			tmp;
+	std::stringstream	ss;
+	struct tm 			*tm = localtime(&this->_time);
+
+	ss << tm->tm_mday << " ";
+	ss << (tm->tm_mon + 1) << " ";
+	ss << (tm->tm_year + 1900) << " ";
+	ss << tm->tm_hour << " ";
+	ss << tm->tm_min;
+
+	ss >> tmp;
+	str += ((tmp.size() == 1) ? "0" : "") + tmp + "-";
+	ss >> tmp;
+	str += ((tmp.size() == 1) ? "0" : "") + tmp + "-";
+	ss >> tmp;
+	str += tmp + " ";
+	ss >> tmp;
+	str += ((tmp.size() == 1) ? "0" : "") + tmp + ":";
+	ss >> tmp;
+	str += ((tmp.size() == 1) ? "0" : "") + tmp;
+
+	return (str);
+
 }

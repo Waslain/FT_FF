@@ -42,11 +42,14 @@ void	Server::_sendMessage(int &fd)
 
 void	Server::_deleteClient(size_t const &i)
 {
-	std::cout << "Client " << this->_pfds[i].fd << " disconnected" << std::endl;
-	close(this->_pfds[i].fd);
+	int		fd = this->_pfds[i].fd;
+
+	std::cout << "Client " << fd << " disconnected" << std::endl;
+	shutdown(fd, SHUT_RDWR);
+	close(fd);
 	std::vector<pollfd>::iterator	it = this->_pfds.begin();
-	this->_users.erase(this->_users.find(this->_pfds[i].fd));
 	this->_pfds.erase(it + i);
+	this->_users.erase(this->_users.find(fd));
 }
 
 void	Server::_acceptClient()
@@ -74,6 +77,7 @@ void	Server::_acceptClient()
 	// set the event checked by poll
 	// not sure that i need all of these
 	pfd.events = POLLIN | POLLOUT | POLLERR | POLLRDHUP | POLLHUP;
+	pfd.revents = 0;
 	this->_pfds.push_back(pfd);
 
 	// create a new user
@@ -87,43 +91,44 @@ void	Server::_checkEvents(size_t const &i)
 
 	// when client sends
 	if (this->_pfds[i].revents & POLLIN) {
-		Server::_receiveMessage(fd);
+		_receiveMessage(fd);
+	}
+
+	// if the client is not registered, check if registration is possible
+	if (user.isRegistered() == false) {
+		_checkRegistration(fd);
 	}
 
 	// when client is ready to receive
 	if (this->_pfds[i].revents & POLLOUT && !user.getSendBuf().empty()) {
-		Server::_sendMessage(fd);
+		_sendMessage(fd);
 	}
 
 	// not sure about this one
 	if (this->_pfds[i].revents & POLLERR) {
-		std::cout << "POLLERR" << std::endl;
+		std::cout << "Client " << fd << " POLLERR" << std::endl;
 	}
 
 	// if the client is closed -> close his fd and remove it from pfds
-	if (this->_pfds[i].revents & POLLRDHUP) {
-		Server::_deleteClient(i);
+	if (this->_pfds[i].revents & POLLRDHUP || user.disconnect()) {
+		_deleteClient(i);
 	}
 }
+
 void	Server::loop()
 {
-	while (true)
+	while (run)
 	{
 		// poll will wait for any file file descriptor ready to perform I/O 
-		poll(&this->_pfds[0], this->_pfds.size(), -1);
-
-		// to close the program if ctrl-c was used
-		if (run == false) {
-			return ;
-		}
+		poll(&this->_pfds[0], this->_pfds.size(), 1000);
 
 		for (size_t i = 1; i < this->_pfds.size(); i++) {
-			Server::_checkEvents(i);
+			_checkEvents(i);
 		}
 		
 		// if the socket is ready for an input event -> a client is trying to connect
 		if (this->_pfds[0].revents & POLLIN) {
-			Server::_acceptClient();
+			_acceptClient();
 		}
 	}
 }

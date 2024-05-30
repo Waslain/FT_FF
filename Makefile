@@ -33,10 +33,12 @@ SRCS		=	main.cpp			\
 				loop.cpp			\
 				socket.cpp			\
 				message.cpp			\
+				register.cpp		\
 				$(addprefix cmd/,	\
 				PASS.cpp			\
 				CAP.cpp				\
 				NICK.cpp			\
+				USER.cpp			\
 				)
 INCL		:= $(addprefix $(INCL_PATH), $(INCL))
 SRCS		:= $(addprefix $(SRCS_PATH), $(SRCS))
