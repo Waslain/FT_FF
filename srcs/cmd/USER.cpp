@@ -23,9 +23,6 @@ void	Server::_USER(int const &fd, std::string &args)
 	username = "~" + username;
 	username = username.substr(0, USERLEN);
 
-	std::cout << username << std::endl;
-	std::cout << realname << std::endl;
-
 	user.setUsername(username);
 	user.setRealname(realname);
 }
