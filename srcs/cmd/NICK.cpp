@@ -22,6 +22,7 @@ static bool is_valid_nick(std::string nick)
 			}
 		}
 	}
+
 	return true;
 }
 

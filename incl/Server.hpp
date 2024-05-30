@@ -29,6 +29,7 @@
 #include <vector>
 #include <algorithm>
 #include <sstream>
+#include <time.h>
 
 #include "User.hpp"
 #include "Message.hpp"
@@ -36,6 +37,9 @@
 #ifndef DEBUG
 # define DEBUG 0
 #endif
+
+#define TIMEOUT 20
+#define USERLEN 20
 
 extern bool	run;
 
@@ -61,26 +65,31 @@ class Server
 		std::string				 _pass;
 		std::string				_host;
 		int 					_socket;
+		time_t					_time;
 		std::vector<pollfd>		_pfds;
 		std::map<int, User>		_users;
 		std::map<std::string, void(Server::*)(int const &, std::string &)> _cmdmap;
 
-		void	_PASS(int const &fd, std::string &args);
-		void	_CAP(int const &fd, std::string &args);
-		void	_NICK(int const &fd, std::string &args);
+		void		_CAP(int const &fd, std::string &args);
+		void		_PASS(int const &fd, std::string &args);
+		void		_NICK(int const &fd, std::string &args);
+		void		_USER(int const &fd, std::string &args);
 
 		//UTILS
-		bool	nick_already_in_use(std::string nick);
+		bool		nick_already_in_use(std::string nick);
 		//UTILS
 
-		void 	_initCmdMap();
-		void	_getSocket(std::string const &);
-		void	_checkEvents(size_t const &i);
-		void	_acceptClient();
-		void	_deleteClient(size_t const &i);
-		void	_receiveMessage(int const &fd);
-		void	_sendMessage(int &fd);
-		void	_addClientMessage(User &user, std::string const &msg);
+		void 		_initCmdMap();
+		void		_getSocket(std::string const &);
+		void		_checkEvents(size_t const &i);
+		void		_acceptClient();
+		void		_deleteClient(size_t const &i);
+		void		_receiveMessage(int const &fd);
+		void		_sendMessage(int &fd);
+		void		_addClientMessage(User &user, std::string const &msg);
+		void		_checkRegistration(int &fd);
+		void		_registerClient(User &user);
+		std::string	_getTime();
 };
 
 std::string	getFirstWord(std::string &str);
