@@ -5,7 +5,7 @@ void	Server::_receiveMessage(int const &fd)
 	char	buf[1024] = {0};
 
 	if (recv(fd, buf, 1024, 0) < 0) {
-		std::cout << "recv error" << std::endl;
+		std::cout << "Error: recv: " << strerror(errno) << std::endl;
 		return ;
 	}
 
@@ -33,7 +33,7 @@ void	Server::_sendMessage(int &fd)
 	size_t		len = msg.size();
 
 	if (send(fd, buf, len, 0) < 1) {
-		std::cout << "send error" << std::endl;
+		std::cout << "Error: send: " << strerror(errno) << std::endl;
 		return ;
 	}
 	std::cout << "sent: " << msg << std::flush;
@@ -61,14 +61,14 @@ void	Server::_acceptClient()
 	pfd.fd = accept(this->_pfds[0].fd, NULL, NULL);
 	if (pfd.fd < 0)
 	{
-		std::cout << "Error: " << strerror(errno) << std::endl;
+		std::cout << "Error: accept:" << strerror(errno) << std::endl;
 		throw ;
 	}
 
 	// set the fd as non blocking
 	if (fcntl(pfd.fd, F_SETFL, O_NONBLOCK) < 0)
 	{
-		std::cout << "Error: " << strerror(errno) << std::endl;
+		std::cout << "Error: fcntl: " << strerror(errno) << std::endl;
 		throw ;
 	}
 

@@ -4,7 +4,7 @@ void		Server::_QUIT(int const &fd, std::string &args)
 {
 	User	&user = this->_users[fd];
 
-	user.setDisconnection();
 	_addClientMessage(user, ERROR("disconnection"));
+	user.setDisconnection();
 	(void)args;
 }
