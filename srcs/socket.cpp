@@ -17,8 +17,8 @@ void	Server::_getSocket(std::string const &port)
 	status = getaddrinfo(NULL, port.c_str(), &hints, &res);
 	if (status != 0)
 	{
-		std::cerr << gai_strerror(status) << std::endl;
-		throw ;
+		std::cerr << RED << gai_strerror(status) << RESETCOLOR << std::endl;
+		throw emptyException();
 	}
 
 	// iterate through the list of addresses
@@ -46,8 +46,8 @@ void	Server::_getSocket(std::string const &port)
 
 	if (p == NULL)
 	{
-		std::cerr << "Error: " << strerror(errno) << std::endl;
-		throw ;
+		std::cerr << RED << "Error: " << strerror(errno) << RESETCOLOR << std::endl;
+		throw emptyException();
 	}
 
 	// print the address
@@ -63,15 +63,15 @@ void	Server::_getSocket(std::string const &port)
 	// mark the socket as a passive socket, used to accept connection requests
 	if (listen(this->_socket, 10) < 0)
 	{
-		std::cerr << "Error: " << strerror(errno) << std::endl;
-		throw ;
+		std::cerr << RED<< "Error: " << strerror(errno) << RESETCOLOR << std::endl;
+		throw emptyException();
 	}
 
 	// set the socket as non blocking
 	if (fcntl(this->_socket, F_SETFL, O_NONBLOCK) < 0)
 	{
-		std::cout << "Error: " << strerror(errno) << std::endl;
-		throw ;
+		std::cout << RED << "Error: " << strerror(errno) << RESETCOLOR << std::endl;
+		throw emptyException();
 	}
 
 	pollfd	pfd;

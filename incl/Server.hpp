@@ -31,15 +31,20 @@
 #include <sstream>
 #include <time.h>
 
+#include "colors.hpp"
 #include "User.hpp"
 #include "Channel.hpp"
-#include "Message.hpp"
 
 #ifndef DEBUG
 # define DEBUG 0
 #endif
 
 #define TIMEOUT 20
+#define VERSION "ft_ff-1.0"
+#define HOSTNAME "ft_ff"
+#define USERLEN 20
+#define	USERMODES "i"
+#define	CHANMODES "iklot"
 
 extern bool	run;
 
@@ -89,10 +94,36 @@ class Server
 		void		_deleteClient(size_t const &i);
 		void		_receiveMessage(int const &fd);
 		void		_sendMessage(int &fd);
+		void		_printMessage(std::string msg, std::string str, int const &fd);
 		void		_addClientMessage(User &user, std::string const &msg);
 		void		_checkRegistration(int &fd);
 		void		_registerClient(User &user);
-		std::string	_getTime();
+
+		// messages
+		std::string	RPL_WELCOME(User &user);
+		std::string	RPL_YOURHOST(User &user);
+		std::string	RPL_CREATED(User &user);
+		std::string	RPL_MYINFO(User &user);
+		std::string	RPL_ISUPPORT(User &user);
+		std::string ERR_NONICKNAMEGIVEN(User &user);
+		std::string ERR_ERRONEUSNICKNAME(User &user);
+		std::string ERR_NICKNAMEINUSE(User &user);
+		std::string ERR_NEEDMOREPARAMS(User &user, std::string command);
+		std::string ERR_ALREADYREGISTERED(User &user);
+		std::string ERR_PASSWDMISMATCH(User &user);
+		std::string ERROR(std::string msg);
+		std::string	PONG(std::string &token);
+		std::string	_numeric(User &, std::string, std::string &, std::string);
+		std::string	_getDate();
+};
+
+class	emptyException: public std::exception
+{
+	virtual const char	*what() const throw()
+	{
+		return (NULL);
+	}
+
 };
 
 std::string	getFirstWord(std::string &str);

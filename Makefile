@@ -25,14 +25,16 @@ OBJS_PATH	= ./objs/
 
 # Files
 INCL		=	Server.hpp			\
-				Message.hpp			\
 				User.hpp			\
-				Channel.hpp
+				Channel.hpp			\
+				colors.hpp
 SRCS		=	main.cpp			\
 				Server.cpp			\
 				User.cpp			\
-				loop.cpp			\
 				socket.cpp			\
+				loop.cpp			\
+				handleEvents.cpp	\
+				parse.cpp			\
 				message.cpp			\
 				register.cpp		\
 				$(addprefix cmd/,	\

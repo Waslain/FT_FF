@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include <iomanip>
 
 bool	run = true;
 
@@ -33,7 +34,7 @@ int main(int argc, char const *argv[])
 {
 	if (argc != 3)
 	{
-		std::cerr << "Error: usage: ./ircserv <port> <password>" << std::endl;
+		std::cerr << RED <<  "Error: usage: ./ircserv <port> <password>" << RESETCOLOR << std::endl;
 		return (1);
 	}
 
