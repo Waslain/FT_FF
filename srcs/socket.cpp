@@ -17,7 +17,7 @@ void	Server::_getSocket(std::string const &port)
 	status = getaddrinfo(NULL, port.c_str(), &hints, &res);
 	if (status != 0)
 	{
-		std::cerr << RED << gai_strerror(status) << RESETCOLOR << std::endl;
+		std::cerr << RED << "Error: " << gai_strerror(status) << RESETCOLOR << std::endl;
 		throw emptyException();
 	}
 

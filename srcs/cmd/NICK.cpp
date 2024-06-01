@@ -1,29 +1,19 @@
 #include "Server.hpp"
 
-static bool is_alnum(char c)
-{
-    return (isalpha(c) || isdigit(c));
-}
-
-static bool is_valid_not_alnum_char(char c)
-{
-	return (c == '[' || c == ']' || c == '\\' || c == '{' || c == '}' || c == '|');
-}
-
 static bool is_valid_nick(std::string nick)
 {
-	for (int i = 0; nick[i]; i++)
-	{
-		if (!is_alnum(nick[i]))
-		{
-			if (!is_valid_not_alnum_char(nick[i]))
-			{
-				return false;
-			}
-		}
+	if (nick.size() > NICKLEN) {
+		return (false);
 	}
-
-	return true;
+	std::string	set = ALPHA + SPECIAL;
+	if (set.find_first_of(nick[0], 0) == std::string::npos) {
+		return (false);
+	}
+	set += NUM + "-";
+	if (nick.find_first_not_of(set, 1) != std::string::npos) {
+		return (false);
+	}
+	return (true);
 }
 
 bool	Server::nick_already_in_use(std::string nick)
@@ -46,6 +36,9 @@ void	Server::_NICK(int const &fd, std::string &args)
 
 	if (DEBUG) {
 		std::cout << "nick received: " << args << std::endl;
+	}
+	if (user.canRegister()) {
+		return ;
 	}
 	if (args.empty())
 	{

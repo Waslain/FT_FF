@@ -20,6 +20,7 @@ class	User
 		void								setPassword(std::string const &);
 		void								setRecvBuf(std::string const &);
 		void								setSendBuf(std::string const &);
+		void								setRegistration(bool const &);
 		void								registerUser();
 		void								setDisconnection();
 		void								setMode(char const &, bool const &);
@@ -32,6 +33,7 @@ class	User
 		std::string							getRecvBuf() const;
 		std::string							getSendBuf() const;
 		time_t								getTime() const;
+		bool								canRegister() const;
 		bool								isRegistered() const;
 		bool								disconnect() const;
 		bool								getMode(char const &);
@@ -45,8 +47,9 @@ class	User
 		std::string							_sendBuf;
 		std::string 						_recvBuf;
 		time_t 								_time;
+		bool								_canRegister;
 		bool								_registered;
 		bool								_disconnect;
-		std::map<char, bool>				_mode;
+		std::map<char, bool>				_modes;
 		std::map<std::string, Channel *>	_channels;
 };

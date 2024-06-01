@@ -7,6 +7,9 @@ void	Server::_PASS(int const &fd, std::string &args)
 	if (DEBUG) {
 		std::cout << "password received: " << args << std::endl;
 	}
+	if (user.canRegister()) {
+		return ;
+	}
 	if (user.isRegistered())
 	{
 		_addClientMessage(user, ERR_ALREADYREGISTERED(user));

@@ -44,6 +44,12 @@ void Server::_parseInput(std::string &str, int const &fd)
 	}
 
 	strToupper(cmd);
+	if (!_users[fd].isRegistered()
+		&& cmd.compare("PASS")
+		&& cmd.compare("NICK")
+		&& cmd.compare("USER")) {
+		return ;
+	}
 	if (_cmdmap[cmd] != NULL)
 		(*this.*_cmdmap[cmd])(fd, str);
 }

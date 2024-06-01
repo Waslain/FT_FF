@@ -4,6 +4,9 @@ void	Server::_USER(int const &fd, std::string &args)
 {
 	User	&user = _users[fd];
 
+	if (user.canRegister()) {
+		return ;
+	}
 	if (user.isRegistered()) {
 		_addClientMessage(user, ERR_ALREADYREGISTERED(user));
 		return ;

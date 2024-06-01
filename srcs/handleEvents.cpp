@@ -64,16 +64,27 @@ void	Server::_receiveMessage(int const &fd)
 
 void	Server::_sendMessage(int &fd)
 {
-	std::string	msg = _users[fd].getSendBuf();
+	User		&user = _users[fd];
+	std::string	msg = user.getSendBuf();
+	std::string	msgSent;
 	char const	*buf = msg.c_str();
 	size_t		len = msg.size();
+	size_t		sent = 0;
 
-	if (send(fd, buf, len, MSG_NOSIGNAL) < 1) {
+	sent = send(fd, buf, len, MSG_NOSIGNAL);
+	if (sent < 1) {
 		std::cout << "Error: send: " << strerror(errno) << std::endl;
 		return ;
 	}
-	_printMessage("Sent: ", msg, fd);
-	_users[fd].setSendBuf("");
+	msgSent = msg.substr(0, sent);
+	msg.erase(0, sent);
+	_printMessage("Sent: ", msgSent, fd);
+	user.setSendBuf(msg);
+	if (user.canRegister() & msg.empty())
+	{
+		user.setRegistration(false);
+		user.registerUser();
+	}
 }
 
 void	Server::_deleteClient(size_t const &i)
@@ -128,6 +139,7 @@ void	Server::_acceptClient()
 
 	_nbUConnections++;
 	_nbUsers++;
+	_nbIUsers++;
 	if (_nbUsers > _maxUsers) {
 		_maxUsers = _nbUsers;
 	}

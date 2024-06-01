@@ -39,13 +39,23 @@
 # define DEBUG 0
 #endif
 
-#define TIMEOUT 30
+#define TIMEOUT 10
 #define VERSION std::string("ircserv-1.42.0")
-#define HOSTNAME std::string("ft_ff")
+#define HOSTNAME std::string("ft_irc")
+#define AWAYLEN 350
+#define CHANLIMIT 5
+#define	CHANMODES std::string("iklot")
+#define CHANNELLEN 50
+#define HOSTLEN 50
+#define KICKLEN 350
+#define NICKLEN 30
+#define TOPICLEN 350
 #define USERLEN 20
 #define	USERMODES std::string("i")
-#define	CHANMODES std::string("iklot")
-#define CHANLIMIT 5
+
+#define	ALPHA std::string("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+#define NUM std::string("0123456789")
+#define SPECIAL std::string("[]\\`_^{}|")
 
 extern bool	run;
 
@@ -133,6 +143,7 @@ class Server
 		std::string	PONG(std::string &token);
 		std::string	_numeric(User &, std::string, std::string &, std::string);
 		std::string	_getDate();
+		std::string	_ISupportTokens();
 };
 
 class	emptyException: public std::exception

@@ -26,8 +26,9 @@ std::string	Server::RPL_MYINFO(User &user)
 
 std::string	Server::RPL_ISUPPORT(User &user)
 {
+	std::string str = _ISupportTokens();
 	std::string	msg = "are supported by this server";
-	return (_numeric(user, "", msg, "005"));
+	return (_numeric(user, str, msg, "005"));
 }
 
 std::string	Server::RPL_LUSERCLIENT(User &user)
@@ -175,6 +176,33 @@ std::string	Server::_getDate()
 
 	return (str);
 
+}
+
+std::string	Server::_ISupportTokens()
+{
+	std::string	msg = std::string("AWAYLEN=") + itos(AWAYLEN) + " ";
+	msg += std::string("CHANLIMIT=#:") + itos(CHANLIMIT) + " ";
+	// CHANMODES
+	msg += std::string("CHANNELLEN=") + itos(CHANNELLEN) + " ";
+	msg += std::string("CHANTYPES=# ");
+	// ELIST
+	// EXCEPTS 
+	// EXTBAN
+	msg += std::string("HOSTLEN=") + itos(HOSTLEN) + " ";
+	// INVEX
+	msg += std::string("KICKLEN=") + itos(KICKLEN) + " ";
+	// MAXLIST
+	// MAXTARGETS
+	// MODES
+	msg += std::string("NICKLEN=") + itos(NICKLEN) + " ";
+	// PREFIX
+	// SAFELIST
+	// SILENCE
+	// STATUSMSG
+	// TARGMAX
+	msg += std::string("TOPICLEN=") + itos(TOPICLEN) + " ";
+	msg += std::string("USERLEN=") + itos(USERLEN) + " ";
+	return (msg);
 }
 
 std::string	itos(int const &i)
