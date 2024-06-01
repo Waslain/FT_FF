@@ -88,6 +88,9 @@ void	Server::_deleteClient(size_t const &i)
 	if (_users[fd].getMode('i')) {
 		_nbIUsers--;
 	}
+	if (_users[fd].isRegistered() == false) {
+		_nbUConnections--;
+	}
 	_pfds.erase(it + i);
 	_users.erase(fd);
 }
