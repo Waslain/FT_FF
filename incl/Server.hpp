@@ -40,11 +40,11 @@
 #endif
 
 #define TIMEOUT 30
-#define VERSION "ircserv-1.42.0"
-#define HOSTNAME "ft_ff"
+#define VERSION std::string("ircserv-1.42.0")
+#define HOSTNAME std::string("ft_ff")
 #define USERLEN 20
-#define	USERMODES "i"
-#define	CHANMODES "iklot"
+#define	USERMODES std::string("i")
+#define	CHANMODES std::string("iklot")
 #define CHANLIMIT 5
 
 extern bool	run;
@@ -89,6 +89,7 @@ class Server
 		void		_PING(int const &fd, std::string &args);
 		void		_QUIT(int const &fd, std::string &args);
 		void		_LUSERS(int const &fd, std::string &args);
+		void		_VERSION(int const &fd, std::string &args);
 
 		//UTILS
 		bool		nick_already_in_use(std::string nick);
@@ -120,6 +121,8 @@ class Server
 		std::string	RPL_LUSERME(User &user);
 		std::string	RPL_LOCALUSERS(User &user);
 		std::string	RPL_GLOBALUSERS(User &user);
+		std::string RPL_VERSION(User &user);
+		std::string ERR_NOSUCHSERVER(User &user);
 		std::string ERR_NONICKNAMEGIVEN(User &user);
 		std::string ERR_ERRONEUSNICKNAME(User &user);
 		std::string ERR_NICKNAMEINUSE(User &user);
@@ -143,3 +146,4 @@ class	emptyException: public std::exception
 
 std::string	getFirstWord(std::string &str);
 std::string	itos(int const &i);
+void		strToupper(std::string &str);
