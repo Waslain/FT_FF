@@ -31,6 +31,21 @@ std::string	Server::RPL_ISUPPORT(User &user)
 	return (_numeric(user, str, msg, "005"));
 }
 
+std::string	Server::RPL_UMODEIS(User &user)
+{
+	std::string	msg = ":localhost 221 ";
+	msg += (user.getNickname().empty()) ? "*" : user.getNickname() + " ";
+	std::string	modes = USERMODES;
+	size_t		size = modes.size();
+	for (size_t i = 0; i < size; i++) {
+		if (user.getMode(modes[i])) {
+			msg += modes[i];
+		}
+	}
+	msg += + "\r\n";
+	return (msg);
+}
+
 std::string	Server::RPL_LUSERCLIENT(User &user)
 {
 	std::string	msg = std::string("There ") + ((_nbUsers != 1) ? "are " : "is ") + itos(_nbUsers);

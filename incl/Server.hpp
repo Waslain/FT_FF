@@ -128,6 +128,7 @@ class Server
 		std::string	RPL_CREATED(User &user);
 		std::string	RPL_MYINFO(User &user);
 		std::string	RPL_ISUPPORT(User &user);
+		std::string	RPL_UMODEIS(User &user);
 		std::string	RPL_LUSERCLIENT(User &user);
 		std::string	RPL_LUSEROP(User &user);
 		std::string	RPL_LUSERUNKNOWN(User &user);
