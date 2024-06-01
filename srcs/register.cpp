@@ -11,7 +11,7 @@ void	Server::_registerClient(User &user)
 	}
 	// register the user
 	_nbUConnections--;
-	user.registerUser();
+	user.setRegistration(true);
 	_addClientMessage(user, RPL_WELCOME(user));
 	_addClientMessage(user, RPL_YOURHOST(user));
 	_addClientMessage(user, RPL_CREATED(user));
