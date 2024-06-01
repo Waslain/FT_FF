@@ -29,6 +29,7 @@
 #include <vector>
 #include <algorithm>
 #include <sstream>
+#include <fstream>
 #include <time.h>
 
 #include "colors.hpp"
@@ -42,6 +43,8 @@
 #define TIMEOUT 10
 #define VERSION std::string("ircserv-1.42.0")
 #define HOSTNAME std::string("ft_irc")
+#define MOTD "motd"
+
 #define AWAYLEN 350
 #define CHANLIMIT 5
 #define	CHANMODES std::string("iklot")
@@ -100,6 +103,7 @@ class Server
 		void		_QUIT(int const &fd, std::string &args);
 		void		_LUSERS(int const &fd, std::string &args);
 		void		_VERSION(int const &fd, std::string &args);
+		void		_MOTD(int const &fd, std::string &args);
 
 		//UTILS
 		bool		nick_already_in_use(std::string nick);
@@ -124,6 +128,7 @@ class Server
 		std::string	RPL_CREATED(User &user);
 		std::string	RPL_MYINFO(User &user);
 		std::string	RPL_ISUPPORT(User &user);
+		std::string	RPL_UMODEIS(User &user);
 		std::string	RPL_LUSERCLIENT(User &user);
 		std::string	RPL_LUSEROP(User &user);
 		std::string	RPL_LUSERUNKNOWN(User &user);
@@ -132,7 +137,11 @@ class Server
 		std::string	RPL_LOCALUSERS(User &user);
 		std::string	RPL_GLOBALUSERS(User &user);
 		std::string RPL_VERSION(User &user);
+		std::string RPL_MOTD(User &user, std::string msg);
+		std::string RPL_MOTDSTART(User &user);
+		std::string RPL_ENDOFMOTD(User &user);
 		std::string ERR_NOSUCHSERVER(User &user);
+		std::string ERR_NOMOTD(User &user);
 		std::string ERR_NONICKNAMEGIVEN(User &user);
 		std::string ERR_ERRONEUSNICKNAME(User &user);
 		std::string ERR_NICKNAMEINUSE(User &user);

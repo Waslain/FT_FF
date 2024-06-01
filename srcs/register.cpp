@@ -19,6 +19,8 @@ void	Server::_registerClient(User &user)
 	_addClientMessage(user, RPL_ISUPPORT(user));
 	std::string	args;
 	_LUSERS(user.getFd(), args);
+	_MOTD(user.getFd(), args);
+	_addClientMessage(user, RPL_UMODEIS(user));
 }
 
 void	Server::_checkRegistration(int &fd)

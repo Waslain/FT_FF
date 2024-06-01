@@ -18,7 +18,7 @@ void	Server::_USER(int const &fd, std::string &args)
 	std::string	realname = args;
 
 	if (username.empty() || realname.empty()) {
-		_addClientMessage(user, ERR_NEEDMOREPARAMS(user, "USER"));
+		_addClientMessage(user, ERR_NEEDMOREPARAMS(user, "USER "));
 		return ;
 	}
 
