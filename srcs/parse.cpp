@@ -22,6 +22,13 @@ std::string	getFirstWord(std::string &str)
 	return  (s);
 }
 
+void	strToupper(std::string &str)
+{
+	for (size_t i = 0; i < str.size(); i++) {
+		str[i] = toupper(str[i]);
+	}
+}
+
 void Server::_parseInput(std::string &str, int const &fd)
 {
 	std::string	cmd = getFirstWord(str);
@@ -36,6 +43,7 @@ void Server::_parseInput(std::string &str, int const &fd)
 		std::cout << "args: " << str << std::endl;
 	}
 
+	strToupper(cmd);
 	if (_cmdmap[cmd] != NULL)
 		(*this.*_cmdmap[cmd])(fd, str);
 }

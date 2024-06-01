@@ -45,6 +45,7 @@ SRCS		=	main.cpp			\
 				PING.cpp			\
 				QUIT.cpp			\
 				LUSERS.cpp			\
+				VERSION.cpp			\
 				)
 INCL		:= $(addprefix $(INCL_PATH), $(INCL))
 SRCS		:= $(addprefix $(SRCS_PATH), $(SRCS))

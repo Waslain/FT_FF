@@ -14,13 +14,14 @@
 
 void Server::_initCmdMap()
 {
-	_cmdmap["CAP"] = &Server::_CAP;		// complete
-	_cmdmap["PASS"] = &Server::_PASS;	// complete
-	_cmdmap["NICK"] = &Server::_NICK;
-	_cmdmap["USER"] = &Server::_USER;	// complete
-	_cmdmap["PING"] = &Server::_PING;	// complete
-	_cmdmap["QUIT"] = &Server::_QUIT;
+	_cmdmap["CAP"] = &Server::_CAP;
+	_cmdmap["PASS"] = &Server::_PASS;
+	_cmdmap["NICK"] = &Server::_NICK;	// not complete
+	_cmdmap["USER"] = &Server::_USER;
+	_cmdmap["PING"] = &Server::_PING;
+	_cmdmap["QUIT"] = &Server::_QUIT;	//not complete
 	_cmdmap["LUSERS"] = &Server::_LUSERS;
+	_cmdmap["VERSION"] = &Server::_VERSION;
 
 	//_cmdmap["OPER"] = &Server::_OPER;
 	//_cmdmap["JOIN"] = &Server::_JOIN;
@@ -31,7 +32,6 @@ void Server::_initCmdMap()
 	//_cmdmap["INVITE"] = &Server::_INVITE;
 	//_cmdmap["KICK"] = &Server::_KICK;
 	//_cmdmap["MOTD"] = &Server::_MOTD;
-	//_cmdmap["VERSION"] = &Server::_VERSION;
 	//_cmdmap["ADMIN"] = &Server::_ADMIN;
 	//_cmdmap["TIME"] = &Server::_TIME;
 	//_cmdmap["STATS"] = &Server::_STATS;
