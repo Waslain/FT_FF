@@ -22,6 +22,7 @@ void Server::_initCmdMap()
 	_cmdmap["QUIT"] = &Server::_QUIT;	//not complete
 	_cmdmap["LUSERS"] = &Server::_LUSERS;
 	_cmdmap["VERSION"] = &Server::_VERSION;
+	_cmdmap["MOTD"] = &Server::_MOTD;
 
 	//_cmdmap["OPER"] = &Server::_OPER;
 	//_cmdmap["JOIN"] = &Server::_JOIN;
@@ -31,7 +32,6 @@ void Server::_initCmdMap()
 	//_cmdmap["LIST"] = &Server::_LIST;
 	//_cmdmap["INVITE"] = &Server::_INVITE;
 	//_cmdmap["KICK"] = &Server::_KICK;
-	//_cmdmap["MOTD"] = &Server::_MOTD;
 	//_cmdmap["ADMIN"] = &Server::_ADMIN;
 	//_cmdmap["TIME"] = &Server::_TIME;
 	//_cmdmap["STATS"] = &Server::_STATS;

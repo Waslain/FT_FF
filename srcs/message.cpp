@@ -86,10 +86,33 @@ std::string Server::RPL_VERSION(User &user)
 	return (_numeric(user, str, msg, "351"));
 }
 
+std::string Server::RPL_MOTD(User &user, std::string msg)
+{
+	return (_numeric(user, "", msg, "372"));
+}
+
+std::string Server::RPL_MOTDSTART(User &user)
+{
+	std::string	msg = HOSTNAME + " Message of the day -";
+	return (_numeric(user, "", msg, "375"));
+}
+
+std::string Server::RPL_ENDOFMOTD(User &user)
+{
+	std::string	msg = "End of MOTD";
+	return (_numeric(user, "", msg, "376"));
+}
+
 std::string Server::ERR_NOSUCHSERVER(User &user)
 {
 	std::string	msg = "No such server";
 	return (_numeric(user, "", msg, "402"));
+}
+
+std::string Server::ERR_NOMOTD(User &user)
+{
+	std::string	msg = "MOTD file is missing";
+	return (_numeric(user, "", msg, "422"));
 }
 
 std::string Server::ERR_NONICKNAMEGIVEN(User &user)
