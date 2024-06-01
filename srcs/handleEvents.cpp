@@ -45,7 +45,7 @@ void	Server::_receiveMessage(int const &fd)
 	}
 	_printMessage("Received: ", std::string(buf), fd);
 
-	std::string	s = this->_users[fd].getRecvBuf() + buf;
+	std::string	s = _users[fd].getRecvBuf() + buf;
 	std::string	msg;
 	size_t		pos = 0;
 
@@ -57,35 +57,39 @@ void	Server::_receiveMessage(int const &fd)
 		}
 		msg = s.substr(0, pos);
 		s.erase(0, pos + 2);
-		parseInput(msg, fd);
+		_parseInput(msg, fd);
 	}
-	this->_users[fd].setRecvBuf(s);
+	_users[fd].setRecvBuf(s);
 }
 
 void	Server::_sendMessage(int &fd)
 {
-	std::string	msg = this->_users[fd].getSendBuf();
+	std::string	msg = _users[fd].getSendBuf();
 	char const	*buf = msg.c_str();
 	size_t		len = msg.size();
 
-	if (send(fd, buf, len, 0) < 1) {
+	if (send(fd, buf, len, MSG_NOSIGNAL) < 1) {
 		std::cout << "Error: send: " << strerror(errno) << std::endl;
 		return ;
 	}
 	_printMessage("Sent: ", msg, fd);
-	this->_users[fd].setSendBuf("");
+	_users[fd].setSendBuf("");
 }
 
 void	Server::_deleteClient(size_t const &i)
 {
-	int		fd = this->_pfds[i].fd;
+	int		fd = _pfds[i].fd;
 
 	std::cout << BBLUE << "Client " << fd << " disconnected" << RESETCOLOR << std::endl;
 	shutdown(fd, SHUT_RDWR);
 	close(fd);
-	std::vector<pollfd>::iterator	it = this->_pfds.begin();
-	this->_pfds.erase(it + i);
-	this->_users.erase(fd);
+	std::vector<pollfd>::iterator	it = _pfds.begin();
+	_nbUsers--;
+	if (_users[fd].getMode('i')) {
+		_nbIUsers--;
+	}
+	_pfds.erase(it + i);
+	_users.erase(fd);
 }
 
 void	Server::_acceptClient()
@@ -94,18 +98,18 @@ void	Server::_acceptClient()
 	pollfd	pfd;
 
 	// accept the connection, creating a new fd for the client
-	pfd.fd = accept(this->_pfds[0].fd, NULL, NULL);
+	pfd.fd = accept(_pfds[0].fd, NULL, NULL);
 	if (pfd.fd < 0)
 	{
 		std::cout << RED << "Error: accept:" << strerror(errno) << RESETCOLOR << std::endl;
-		throw ;
+		throw emptyException();
 	}
 
 	// set the fd as non blocking
 	if (fcntl(pfd.fd, F_SETFL, O_NONBLOCK) < 0)
 	{
 		std::cout << RED << "Error: fcntl: " << strerror(errno) << RESETCOLOR << std::endl;
-		throw ;
+		throw emptyException();
 	}
 
 	std::cout << BGREEN << "New client connected, fd = " << pfd.fd << RESETCOLOR << std::endl;
@@ -114,8 +118,14 @@ void	Server::_acceptClient()
 	// not sure that i need all of these
 	pfd.events = POLLIN | POLLOUT | POLLERR | POLLRDHUP | POLLHUP;
 	pfd.revents = 0;
-	this->_pfds.push_back(pfd);
+	_pfds.push_back(pfd);
 
 	// create a new user
-	this->_users[pfd.fd] = User();
+	_users[pfd.fd] = User(pfd.fd);
+
+	_nbUConnections++;
+	_nbUsers++;
+	if (_nbUsers > _maxUsers) {
+		_maxUsers = _nbUsers;
+	}
 }

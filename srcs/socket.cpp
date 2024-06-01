@@ -26,19 +26,19 @@ void	Server::_getSocket(std::string const &port)
 	for (p = res; p != NULL; p = p->ai_next)
 	{
 		// get ad fd to a socket
-		this->_socket = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
-		if (this->_socket < 0) {
+		_socket = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
+		if (_socket < 0) {
 			continue ;
 		}
 
 		// allow the socket to be reused quickly after closing it
 		int	yes = 1;
-		setsockopt(this->_socket, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes));
+		setsockopt(_socket, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes));
 
 		// bind the socket to the address
-		if (bind(this->_socket, p->ai_addr, p->ai_addrlen) < 0)
+		if (bind(_socket, p->ai_addr, p->ai_addrlen) < 0)
 		{
-			close(this->_socket);
+			close(_socket);
 			continue ;
 		}
 		break ;
@@ -61,22 +61,22 @@ void	Server::_getSocket(std::string const &port)
 	freeaddrinfo(res);
 
 	// mark the socket as a passive socket, used to accept connection requests
-	if (listen(this->_socket, 10) < 0)
+	if (listen(_socket, 10) < 0)
 	{
 		std::cerr << RED<< "Error: " << strerror(errno) << RESETCOLOR << std::endl;
 		throw emptyException();
 	}
 
 	// set the socket as non blocking
-	if (fcntl(this->_socket, F_SETFL, O_NONBLOCK) < 0)
+	if (fcntl(_socket, F_SETFL, O_NONBLOCK) < 0)
 	{
 		std::cout << RED << "Error: " << strerror(errno) << RESETCOLOR << std::endl;
 		throw emptyException();
 	}
 
 	pollfd	pfd;
-	pfd.fd = this->_socket;
+	pfd.fd = _socket;
 	pfd.events = POLLIN;
 	pfd.revents = 0;
-	this->_pfds.push_back(pfd);
+	_pfds.push_back(pfd);
 }

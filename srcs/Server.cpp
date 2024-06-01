@@ -14,12 +14,13 @@
 
 void Server::_initCmdMap()
 {
-	_cmdmap["CAP"] = &Server::_CAP;
-	_cmdmap["PASS"] = &Server::_PASS;
+	_cmdmap["CAP"] = &Server::_CAP;		// complete
+	_cmdmap["PASS"] = &Server::_PASS;	// complete
 	_cmdmap["NICK"] = &Server::_NICK;
-	_cmdmap["USER"] = &Server::_USER;
-	_cmdmap["PING"] = &Server::_PING;
+	_cmdmap["USER"] = &Server::_USER;	// complete
+	_cmdmap["PING"] = &Server::_PING;	// complete
 	_cmdmap["QUIT"] = &Server::_QUIT;
+	_cmdmap["LUSERS"] = &Server::_LUSERS;
 
 	//_cmdmap["OPER"] = &Server::_OPER;
 	//_cmdmap["JOIN"] = &Server::_JOIN;
@@ -32,7 +33,6 @@ void Server::_initCmdMap()
 	//_cmdmap["MOTD"] = &Server::_MOTD;
 	//_cmdmap["VERSION"] = &Server::_VERSION;
 	//_cmdmap["ADMIN"] = &Server::_ADMIN;
-	//_cmdmap["LUSERS"] = &Server::_LUSERS;
 	//_cmdmap["TIME"] = &Server::_TIME;
 	//_cmdmap["STATS"] = &Server::_STATS;
 	//_cmdmap["HELP"] = &Server::_HELP;
@@ -50,7 +50,7 @@ void Server::_initCmdMap()
 	//_cmdmap["WALLOPS"] = &Server::_WALLOPS;
 }
 
-Server::Server(std::string port, std::string password): _pass(password), _time(time(NULL))
+Server::Server(std::string port, std::string password): _pass(password), _nbUsers(0), _nbIUsers(0), _maxUsers(0), _nbOperators(0), _nbUConnections(0), _nbChannels(0), _time(time(NULL))
 {
 	_initCmdMap();
 	_getSocket(port);
@@ -58,9 +58,9 @@ Server::Server(std::string port, std::string password): _pass(password), _time(t
 
 Server::~Server()
 {
-	close(this->_socket);
-	std::vector<pollfd>::iterator	it = this->_pfds.begin();
-	std::vector<pollfd>::iterator	ite = this->_pfds.end();
+	close(_socket);
+	std::vector<pollfd>::iterator	it = _pfds.begin();
+	std::vector<pollfd>::iterator	ite = _pfds.end();
 	for (; it < ite; it++) {
 		close(it->fd);
 	}

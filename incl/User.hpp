@@ -9,6 +9,7 @@ class	User
 {
 	public:
 		User();
+		User(int const &fd);
 		User(User const &);
 		~User();
 		User	&operator=(User const &);
@@ -23,6 +24,7 @@ class	User
 		void								setDisconnection();
 		void								setMode(char const &, bool const &);
 
+		int									getFd() const;
 		std::string							getNickname() const;
 		std::string							getUsername() const;
 		std::string							getRealname() const;
@@ -35,6 +37,7 @@ class	User
 		bool								getMode(char const &);
 
 	private:
+		int									_fd;
 		std::string							_nickname;
 		std::string							_username;
 		std::string							_realname;
@@ -45,4 +48,5 @@ class	User
 		bool								_registered;
 		bool								_disconnect;
 		std::map<char, bool>				_mode;
+		std::map<std::string, Channel *>	_channels;
 };

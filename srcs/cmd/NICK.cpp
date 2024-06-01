@@ -42,7 +42,7 @@ bool	Server::nick_already_in_use(std::string nick)
 
 void	Server::_NICK(int const &fd, std::string &args)
 {
-	User	&user = this->_users[fd];
+	User	&user = _users[fd];
 
 	if (DEBUG) {
 		std::cout << "nick received: " << args << std::endl;

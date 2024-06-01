@@ -2,7 +2,7 @@
 
 void	Server::_PING(int const &fd, std::string &args)
 {
-	User	&user = this->_users[fd];
+	User	&user = _users[fd];
 
 	if (DEBUG) {
 		std::cout << "Ping cmd received from user[" << fd << "]" << std::endl;

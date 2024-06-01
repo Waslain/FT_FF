@@ -22,7 +22,7 @@ std::string	getFirstWord(std::string &str)
 	return  (s);
 }
 
-void Server::parseInput(std::string &str, int const &fd)
+void Server::_parseInput(std::string &str, int const &fd)
 {
 	std::string	cmd = getFirstWord(str);
 	if (cmd.empty())

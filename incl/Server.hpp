@@ -39,12 +39,13 @@
 # define DEBUG 0
 #endif
 
-#define TIMEOUT 20
-#define VERSION "ft_ff-1.0"
+#define TIMEOUT 30
+#define VERSION "ircserv-1.42.0"
 #define HOSTNAME "ft_ff"
 #define USERLEN 20
 #define	USERMODES "i"
 #define	CHANMODES "iklot"
+#define CHANLIMIT 5
 
 extern bool	run;
 
@@ -58,7 +59,6 @@ class Server
 		~Server();
 		
 		void	loop();
-		void 	parseInput(std::string &str, int const &);
 
 	private:
 	
@@ -71,6 +71,12 @@ class Server
 		std::string				 		_pass;
 		std::string						_host;
 		int 							_socket;
+		int								_nbUsers;
+		int								_nbIUsers;
+		int								_maxUsers;
+		int								_nbOperators;
+		int								_nbUConnections;
+		int								_nbChannels;
 		time_t							_time;
 		std::vector<pollfd>				_pfds;
 		std::map<int, User>				_users;
@@ -82,6 +88,7 @@ class Server
 		void		_USER(int const &fd, std::string &args);
 		void		_PING(int const &fd, std::string &args);
 		void		_QUIT(int const &fd, std::string &args);
+		void		_LUSERS(int const &fd, std::string &args);
 
 		//UTILS
 		bool		nick_already_in_use(std::string nick);
@@ -95,6 +102,7 @@ class Server
 		void		_receiveMessage(int const &fd);
 		void		_sendMessage(int &fd);
 		void		_printMessage(std::string msg, std::string str, int const &fd);
+		void 		_parseInput(std::string &str, int const &);
 		void		_addClientMessage(User &user, std::string const &msg);
 		void		_checkRegistration(int &fd);
 		void		_registerClient(User &user);
@@ -105,6 +113,13 @@ class Server
 		std::string	RPL_CREATED(User &user);
 		std::string	RPL_MYINFO(User &user);
 		std::string	RPL_ISUPPORT(User &user);
+		std::string	RPL_LUSERCLIENT(User &user);
+		std::string	RPL_LUSEROP(User &user);
+		std::string	RPL_LUSERUNKNOWN(User &user);
+		std::string	RPL_LUSERCHANNELS(User &user);
+		std::string	RPL_LUSERME(User &user);
+		std::string	RPL_LOCALUSERS(User &user);
+		std::string	RPL_GLOBALUSERS(User &user);
 		std::string ERR_NONICKNAMEGIVEN(User &user);
 		std::string ERR_ERRONEUSNICKNAME(User &user);
 		std::string ERR_NICKNAMEINUSE(User &user);
@@ -127,3 +142,4 @@ class	emptyException: public std::exception
 };
 
 std::string	getFirstWord(std::string &str);
+std::string	itos(int const &i);

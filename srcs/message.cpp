@@ -14,7 +14,7 @@ std::string	Server::RPL_YOURHOST(User &user)
 
 std::string	Server::RPL_CREATED(User &user)
 {
-	std::string	msg = ("This server was created ") + _getDate();
+	std::string	msg = "This server was created " + _getDate();
 	return (_numeric(user, "", msg, "003"));
 }
 
@@ -30,9 +30,57 @@ std::string	Server::RPL_ISUPPORT(User &user)
 	return (_numeric(user, "", msg, "005"));
 }
 
+std::string	Server::RPL_LUSERCLIENT(User &user)
+{
+	std::string	msg = std::string("There ") + ((_nbUsers != 1) ? "are " : "is ") + itos(_nbUsers);
+	msg += std::string(" user") + ((_nbUsers != 1) ? "s" : "") + " and " + itos(_nbIUsers) + " invisible on 1 server";
+	return (_numeric(user, "", msg, "251"));
+}
+
+std::string	Server::RPL_LUSEROP(User &user)
+{
+	std::string	str = itos(_nbOperators) + " ";
+	std::string	msg = std::string("operator") + ((_nbOperators != 1) ? "s" : "") + " online";
+	return (_numeric(user, str, msg, "252"));
+}
+
+std::string	Server::RPL_LUSERUNKNOWN(User &user)
+{
+	std::string	str = itos(_nbUConnections) + " ";
+	std::string	msg = std::string("unknown connection") + ((_nbUConnections != 1) ? "s" : "");
+	return (_numeric(user, str, msg, "253"));
+}
+
+std::string	Server::RPL_LUSERCHANNELS(User &user)
+{
+	std::string	str = itos(_nbChannels) + " ";
+	std::string	msg = std::string("channel") + ((_nbUConnections != 1) ? "s" : "") + " formed";
+	return (_numeric(user, str, msg, "254"));
+}
+
+std::string	Server::RPL_LUSERME(User &user)
+{
+	std::string	msg = std::string("I have ") + itos(_nbUsers) + " client" +((_nbUsers != 1) ? "s" : "") + " and 0 servers";
+	return (_numeric(user, "", msg, "255"));
+}
+
+std::string	Server::RPL_LOCALUSERS(User &user)
+{
+	std::string	str = itos(_nbUsers) + " " + itos(_maxUsers) + " ";
+	std::string	msg = std::string("Current local users ") + itos(_nbUsers) + ", max " + itos(_maxUsers);
+	return (_numeric(user, str, msg, "265"));
+}
+
+std::string	Server::RPL_GLOBALUSERS(User &user)
+{
+	std::string	str = itos(_nbUsers) + " " + itos(_maxUsers) + " ";
+	std::string	msg = std::string("Current global users ") + itos(_nbUsers) + ", max " + itos(_maxUsers);
+	return (_numeric(user, str, msg, "266"));
+}
+
 std::string Server::ERR_NONICKNAMEGIVEN(User &user)
 {
-	std::string	msg = "No nickname givern";
+	std::string	msg = "No nickname given";
 	return (_numeric(user, "", msg, "431"));
 }
 
@@ -82,12 +130,9 @@ std::string	Server::_numeric(User &user, std::string str1, std::string &str2, st
 {
 	std::string	msg;
 
-	msg = ":localhost ";
-	msg += numeric + " ";
+	msg = ":localhost " + numeric + " ";
 	msg += (user.getNickname().empty()) ? "*" : user.getNickname() + " ";
-	msg += str1 + " :";
-	msg += str2;
-	msg += "\r\n";
+	msg += str1 + ":" + str2 + "\r\n";
 	return (msg);
 }
 
@@ -96,7 +141,7 @@ std::string	Server::_getDate()
 	std::string			str;
 	std::string			tmp;
 	std::stringstream	ss;
-	struct tm 			*tm = localtime(&this->_time);
+	struct tm 			*tm = localtime(&_time);
 
 	ss << tm->tm_mday << " ";
 	ss << (tm->tm_mon + 1) << " ";
@@ -117,4 +162,13 @@ std::string	Server::_getDate()
 
 	return (str);
 
+}
+
+std::string	itos(int const &i)
+{
+	std::stringstream	ss;
+	std::string			s;
+	ss << i;
+	ss >> s;
+	return (s);
 }

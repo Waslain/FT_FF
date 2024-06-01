@@ -2,7 +2,7 @@
 
 void	Server::_USER(int const &fd, std::string &args)
 {
-	User	&user = this->_users[fd];
+	User	&user = _users[fd];
 
 	if (user.isRegistered()) {
 		_addClientMessage(user, ERR_ALREADYREGISTERED(user));
