@@ -37,10 +37,13 @@ void	Server::_printMessage(std::string msg, std::string str, int const &fd)
 
 void	Server::_receiveMessage(int const &fd)
 {
-	char	buf[1024] = {0};
+	char	buf[INPUTLEN] = {0};
 
-	if (recv(fd, buf, 1024, 0) < 0) {
-		std::cout << "Error: recv: " << strerror(errno) << std::endl;
+	if (recv(fd, buf, INPUTLEN, MSG_DONTWAIT) < 0)
+	{
+		if (errno != EAGAIN || errno != EWOULDBLOCK) {
+			std::cout << RED <<  "Error: recv: " << strerror(errno) << RESETCOLOR << std::endl;
+		}
 		return ;
 	}
 	_printMessage("Received: ", std::string(buf), fd);
@@ -71,9 +74,12 @@ void	Server::_sendMessage(int &fd)
 	size_t		len = msg.size();
 	size_t		sent = 0;
 
-	sent = send(fd, buf, len, MSG_NOSIGNAL);
-	if (sent < 1) {
-		std::cout << "Error: send: " << strerror(errno) << std::endl;
+	sent = send(fd, buf, len, MSG_NOSIGNAL|MSG_DONTWAIT);
+	if (sent < 1)
+	{
+		if (errno != EAGAIN || errno != EWOULDBLOCK) {
+			std::cout << RED << "Error: send: " << strerror(errno) << RESETCOLOR<< std::endl;
+		}
 		return ;
 	}
 	msgSent = msg.substr(0, sent);
@@ -116,13 +122,6 @@ void	Server::_acceptClient()
 	if (pfd.fd < 0)
 	{
 		std::cout << RED << "Error: accept:" << strerror(errno) << RESETCOLOR << std::endl;
-		throw emptyException();
-	}
-
-	// set the fd as non blocking
-	if (fcntl(pfd.fd, F_SETFL, O_NONBLOCK) < 0)
-	{
-		std::cout << RED << "Error: fcntl: " << strerror(errno) << RESETCOLOR << std::endl;
 		throw emptyException();
 	}
 

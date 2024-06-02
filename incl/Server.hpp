@@ -44,6 +44,7 @@
 #define VERSION std::string("ircserv-1.42.0")
 #define HOSTNAME std::string("ft_irc")
 #define MOTD "motd"
+#define INPUTLEN 512
 
 #define AWAYLEN 350
 #define CHANLIMIT 5
@@ -93,6 +94,7 @@ class Server
 		time_t							_time;
 		std::vector<pollfd>				_pfds;
 		std::map<int, User>				_users;
+		std::map<std::string, Channel>	_channels;
 		std::map<std::string, void(Server::*)(int const &, std::string &)> _cmdmap;
 
 		void		_CAP(int const &fd, std::string &args);
@@ -104,6 +106,7 @@ class Server
 		void		_LUSERS(int const &fd, std::string &args);
 		void		_VERSION(int const &fd, std::string &args);
 		void		_MOTD(int const &fd, std::string &args);
+		void		_JOIN(int const &fd, std::string &args);
 
 		//UTILS
 		bool		nick_already_in_use(std::string nick);
@@ -121,6 +124,7 @@ class Server
 		void		_addClientMessage(User &user, std::string const &msg);
 		void		_checkRegistration(int &fd);
 		void		_registerClient(User &user);
+		void		_joinChannel(User &user, std::string &channel, std::string &key);
 
 		// messages
 		std::string	RPL_WELCOME(User &user);
@@ -141,13 +145,21 @@ class Server
 		std::string RPL_MOTDSTART(User &user);
 		std::string RPL_ENDOFMOTD(User &user);
 		std::string ERR_NOSUCHSERVER(User &user);
+		std::string ERR_TOOMANYCHANNELS(User &user, std::string const &channel);
+		std::string ERR_INPUTTOOLONG(User &user);
+		std::string ERR_UNKNOWNCOMMAND(User &user, std::string const &);
 		std::string ERR_NOMOTD(User &user);
 		std::string ERR_NONICKNAMEGIVEN(User &user);
 		std::string ERR_ERRONEUSNICKNAME(User &user);
 		std::string ERR_NICKNAMEINUSE(User &user);
+		std::string ERR_NOTREGISTERED(User &user);
 		std::string ERR_NEEDMOREPARAMS(User &user, std::string command);
 		std::string ERR_ALREADYREGISTERED(User &user);
 		std::string ERR_PASSWDMISMATCH(User &user);
+		std::string ERR_CHANNELISFULL(User &user, std::string const &channel);
+		std::string ERR_INVITEONLYCHAN(User &user, std::string const &channel);
+		std::string ERR_BADCHANNELKEY(User &user, std::string const &channel);
+		std::string ERR_BADCHANMASK(User &user);
 		std::string ERROR(std::string msg);
 		std::string	PONG(std::string &token);
 		std::string	_numeric(User &, std::string, std::string &, std::string);
@@ -167,3 +179,4 @@ class	emptyException: public std::exception
 std::string	getFirstWord(std::string &str);
 std::string	itos(int const &i);
 void		strToupper(std::string &str);
+bool		is_valid_nick(std::string nick);

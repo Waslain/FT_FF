@@ -1,21 +1,5 @@
 #include "Server.hpp"
 
-static bool is_valid_nick(std::string nick)
-{
-	if (nick.size() > NICKLEN) {
-		return (false);
-	}
-	std::string	set = ALPHA + SPECIAL;
-	if (set.find_first_of(nick[0], 0) == std::string::npos) {
-		return (false);
-	}
-	set += NUM + "-";
-	if (nick.find_first_not_of(set, 1) != std::string::npos) {
-		return (false);
-	}
-	return (true);
-}
-
 bool	Server::nick_already_in_use(std::string nick)
 {
 	for (userIt it = _users.begin(); it != _users.end(); it++)

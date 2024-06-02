@@ -26,6 +26,7 @@ class	User
 		void								setMode(char const &, bool const &);
 
 		int									getFd() const;
+		int									getNbChannels() const;
 		std::string							getNickname() const;
 		std::string							getUsername() const;
 		std::string							getRealname() const;
@@ -37,9 +38,15 @@ class	User
 		bool								isRegistered() const;
 		bool								disconnect() const;
 		bool								getMode(char const &);
+		bool								isOnChannel(Channel &channel) const;
+
+		void								joinChannel(Channel &);
+		void								leaveChannel(Channel &);
+		void								clearChannels();
 
 	private:
 		int									_fd;
+		int									_nbChannels;
 		std::string							_nickname;
 		std::string							_username;
 		std::string							_realname;
@@ -52,4 +59,6 @@ class	User
 		bool								_disconnect;
 		std::map<char, bool>				_modes;
 		std::map<std::string, Channel *>	_channels;
+
+		typedef std::map<std::string, Channel *>::iterator	chanIt;
 };

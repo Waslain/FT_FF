@@ -1,36 +1,14 @@
 #include "Server.hpp"
 
-std::string	getFirstWord(std::string &str)
-{
-	std::string	s;
-	size_t		pos = 0;
-
-	pos = str.find(' ');
-	if (pos == std::string::npos)
-	{
-		std::string	tmp = str;
-		str.clear();
-		return (tmp);
-	}
-
-	s = str.substr(0, pos);
-	while (str[pos] == ' ') {
-		pos++;
-	}
-	str.erase(0, pos);
-
-	return  (s);
-}
-
-void	strToupper(std::string &str)
-{
-	for (size_t i = 0; i < str.size(); i++) {
-		str[i] = toupper(str[i]);
-	}
-}
-
 void Server::_parseInput(std::string &str, int const &fd)
 {
+	User	&user = _users[fd];
+
+	if (str.size() > INPUTLEN)
+	{
+		_addClientMessage(user, ERR_INPUTTOOLONG(user));
+		return ;
+	}
 	std::string	cmd = getFirstWord(str);
 	if (cmd.empty())
 	{
@@ -44,12 +22,15 @@ void Server::_parseInput(std::string &str, int const &fd)
 	}
 
 	strToupper(cmd);
-	if (!_users[fd].isRegistered()
-		&& cmd.compare("PASS")
-		&& cmd.compare("NICK")
-		&& cmd.compare("USER")) {
+	if (!_users[fd].isRegistered() && cmd.compare("CAP") && cmd.compare("PASS") && cmd.compare("NICK") && cmd.compare("USER"))
+	{
+		_addClientMessage(user, ERR_NOTREGISTERED(user));
 		return ;
 	}
-	if (_cmdmap[cmd] != NULL)
+	if (_cmdmap[cmd] != NULL) {
 		(*this.*_cmdmap[cmd])(fd, str);
+	}
+	else {
+		_addClientMessage(user, ERR_UNKNOWNCOMMAND(user, cmd));
+	}
 }

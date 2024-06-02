@@ -47,4 +47,10 @@ void	Server::loop()
 			_acceptClient();
 		}
 	}
+
+	userIt	it = _users.begin();
+	userIt	ite = _users.end();
+	for (; it != ite; it++) {
+		it->second.clearChannels();
+	}
 }

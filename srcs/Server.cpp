@@ -19,13 +19,13 @@ void Server::_initCmdMap()
 	_cmdmap["NICK"] = &Server::_NICK;	// not complete
 	_cmdmap["USER"] = &Server::_USER;
 	_cmdmap["PING"] = &Server::_PING;
-	_cmdmap["QUIT"] = &Server::_QUIT;	//not complete
+	_cmdmap["QUIT"] = &Server::_QUIT;	// not complete
 	_cmdmap["LUSERS"] = &Server::_LUSERS;
 	_cmdmap["VERSION"] = &Server::_VERSION;
 	_cmdmap["MOTD"] = &Server::_MOTD;
+	_cmdmap["JOIN"] = &Server::_JOIN;	// not complete
 
 	//_cmdmap["OPER"] = &Server::_OPER;
-	//_cmdmap["JOIN"] = &Server::_JOIN;
 	//_cmdmap["PART"] = &Server::_PART;
 	//_cmdmap["TOPIC"] = &Server::_TOPIC;
 	//_cmdmap["NAMES"] = &Server::_NAMES;

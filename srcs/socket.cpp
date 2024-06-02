@@ -67,13 +67,6 @@ void	Server::_getSocket(std::string const &port)
 		throw emptyException();
 	}
 
-	// set the socket as non blocking
-	if (fcntl(_socket, F_SETFL, O_NONBLOCK) < 0)
-	{
-		std::cout << RED << "Error: " << strerror(errno) << RESETCOLOR << std::endl;
-		throw emptyException();
-	}
-
 	pollfd	pfd;
 	pfd.fd = _socket;
 	pfd.events = POLLIN;
