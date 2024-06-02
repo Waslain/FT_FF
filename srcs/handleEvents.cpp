@@ -109,6 +109,7 @@ void	Server::_deleteClient(size_t const &i)
 		_nbUConnections--;
 	}
 	_pfds.erase(it + i);
+	_users[fd].clearChannels("user disconnected");
 	_users.erase(fd);
 }
 
@@ -135,8 +136,7 @@ void	Server::_acceptClient()
 
 	// create a new user
 	_users[pfd.fd] = User(pfd.fd);
-
-	_nbUConnections++;
+_nbUConnections++;
 	_nbUsers++;
 	_nbIUsers++;
 	if (_nbUsers > _maxUsers) {

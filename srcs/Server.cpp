@@ -24,9 +24,9 @@ void Server::_initCmdMap()
 	_cmdmap["VERSION"] = &Server::_VERSION;
 	_cmdmap["MOTD"] = &Server::_MOTD;
 	_cmdmap["JOIN"] = &Server::_JOIN;	// not complete
+	_cmdmap["PART"] = &Server::_PART;
 
 	//_cmdmap["OPER"] = &Server::_OPER;
-	//_cmdmap["PART"] = &Server::_PART;
 	//_cmdmap["TOPIC"] = &Server::_TOPIC;
 	//_cmdmap["NAMES"] = &Server::_NAMES;
 	//_cmdmap["LIST"] = &Server::_LIST;
@@ -70,4 +70,9 @@ void	Server::_addClientMessage(User &user, std::string const &msg)
 {
 	std::string	tmp = user.getSendBuf() + msg;
 	user.setSendBuf(tmp);
+}
+
+void	Server::_addChannelMessage(Channel &channel, std::string const &msg)
+{
+	channel.send(msg);
 }

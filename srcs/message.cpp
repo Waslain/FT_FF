@@ -94,6 +94,20 @@ std::string	Server::RPL_GLOBALUSERS(User &user)
 	return (_numeric(user, str, msg, "266"));
 }
 
+std::string Server::RPL_TOPIC(User &user, Channel &channel)
+{
+	std::string	str = channel.getName() + " ";
+	std::string	msg = channel.getTopic();
+	return (_numeric(user, str, msg, "332"));
+}
+
+std::string Server::RPL_TOPICWHOTIME(User &user, Channel &channel)
+{
+	std::string	str = channel.getName() + " " + channel.getTopicWho() + " " + itos(channel.getTopicTime()) + " ";
+	std::string	msg = "";
+	return (_numeric(user, str, msg, "333"));
+}
+
 std::string Server::RPL_VERSION(User &user)
 {
 	std::string	str = VERSION + " " + HOSTNAME + " ";
@@ -118,10 +132,18 @@ std::string Server::RPL_ENDOFMOTD(User &user)
 	return (_numeric(user, "", msg, "376"));
 }
 
-std::string Server::ERR_NOSUCHSERVER(User &user)
+std::string Server::ERR_NOSUCHSERVER(User &user, std::string const &server)
 {
+	std::string	str = server + " ";
 	std::string	msg = "No such server";
-	return (_numeric(user, "", msg, "402"));
+	return (_numeric(user, str, msg, "402"));
+}
+
+std::string Server::ERR_NOSUCHCHANNEL(User &user, std::string const &channel)
+{
+	std::string	str = channel + " ";
+	std::string	msg = "No such channel";
+	return (_numeric(user, "", msg, "403"));
 }
 
 std::string Server::ERR_TOOMANYCHANNELS(User &user, std::string const &channel)
@@ -165,6 +187,13 @@ std::string Server::ERR_NICKNAMEINUSE(User &user)
 {
 	std::string	msg = "Nickname is already in use";
 	return (_numeric(user, "", msg, "433"));
+}
+
+std::string Server::ERR_NOTONCHANNEL(User &user, std::string const &channel)
+{
+	std::string str = channel + " ";
+	std::string	msg = "You're not on that channel";
+	return (_numeric(user, "", msg, "442"));
 }
 
 std::string Server::ERR_NOTREGISTERED(User &user)
@@ -230,13 +259,25 @@ std::string	Server::PONG(std::string &token)
 	return (msg);
 }
 
+std::string	Server::JOIN(User &user, std::string const &channel)
+{
+	std::string	msg = std::string(":") + user.getNickname() + "!" + user.getUsername() + "@localhost JOIN " + channel + "\r\n";
+	return (msg);
+}
+
+std::string	Server::PART(User &user, std::string const &channel, std::string const &reason)
+{
+	std::string	msg = std::string(":") + user.getNickname() + "!" + user.getUsername() + "@localhost PART " + channel + (reason.empty() ? "" : " ") + reason + "\r\n";
+	return (msg);
+}
+
 std::string	Server::_numeric(User &user, std::string str1, std::string &str2, std::string numeric)
 {
 	std::string	msg;
 
 	msg = ":localhost " + numeric + " ";
 	msg += (user.getNickname().empty()) ? "*" : user.getNickname() + " ";
-	msg += str1 + ":" + str2 + "\r\n";
+	msg += str1 + (str2.empty() ? "" : ":") + str2 + "\r\n";
 	return (msg);
 }
 

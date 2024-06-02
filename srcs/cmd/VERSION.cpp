@@ -6,7 +6,7 @@ void		Server::_VERSION(int const &fd, std::string &args)
 
 	if (!args.empty() && args.compare(HOSTNAME))
 	{
-		_addClientMessage(user, ERR_NOSUCHSERVER(user));
+		_addClientMessage(user, ERR_NOSUCHSERVER(user, args));
 		return ;
 	}
 	_addClientMessage(user, RPL_VERSION(user));

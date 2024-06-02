@@ -38,11 +38,11 @@ class	User
 		bool								isRegistered() const;
 		bool								disconnect() const;
 		bool								getMode(char const &);
-		bool								isOnChannel(Channel &channel) const;
+		bool								isOnChannel(std::string const &) const;
 
 		void								joinChannel(Channel &);
 		void								leaveChannel(Channel &);
-		void								clearChannels();
+		void								clearChannels(std::string const &);
 
 	private:
 		int									_fd;
@@ -61,4 +61,6 @@ class	User
 		std::map<std::string, Channel *>	_channels;
 
 		typedef std::map<std::string, Channel *>::iterator	chanIt;
+
+		std::string	PART(User &user, std::string const &channel, std::string const &reason);
 };

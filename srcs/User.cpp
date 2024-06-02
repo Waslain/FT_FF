@@ -153,9 +153,9 @@ bool		User::getMode(char const &mode)
 	return (_modes[mode]);
 }
 
-bool		User::isOnChannel(Channel &channel) const
+bool		User::isOnChannel(std::string const &channel) const
 {
-	if (_channels.find(channel.getName()) == _channels.end()) {
+	if (_channels.find(channel) == _channels.end()) {
 		return (false);
 	}
 	return (true);
@@ -166,17 +166,28 @@ void		User::joinChannel(Channel &channel)
 	std::string	name = channel.getName();
 	_channels[name] = &channel;
 	_nbChannels++;
+
 }
 
 void		User::leaveChannel(Channel &channel)
 {
+	_channels[channel.getName()] = NULL;
 	_channels.erase(channel.getName());
 	_nbChannels--;
 }
 
-void	User::clearChannels()
+void	User::clearChannels(std::string const &reason)
 {
 	for (chanIt it = _channels.begin(); it != _channels.end(); it++) {
+		it->second->send(PART(*this, it->second->getName(), reason));
 		it->second->removeUser(*this);
 	}
+	_channels.clear();
+	_nbChannels = 0;
+}
+
+std::string	User::PART(User &user, std::string const &channel, std::string const &reason)
+{
+	std::string	msg = std::string(":") + user.getNickname() + "!" + user.getUsername() + "@localhost PART " + channel + (reason.empty() ? "" : " ") + reason + "\r\n";
+	return (msg);
 }
