@@ -49,6 +49,5 @@ int main(int argc, char const *argv[])
 		if (e.what())
 			std::cerr <<  "Error: " << e.what() << std::endl;
 	}
-
 	return (1);
 }

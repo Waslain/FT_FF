@@ -31,12 +31,14 @@ INCL		=	Server.hpp			\
 SRCS		=	main.cpp			\
 				Server.cpp			\
 				User.cpp			\
+				Channel.cpp			\
 				socket.cpp			\
 				loop.cpp			\
 				handleEvents.cpp	\
 				parse.cpp			\
 				message.cpp			\
 				register.cpp		\
+				utils.cpp			\
 				$(addprefix cmd/,	\
 				PASS.cpp			\
 				CAP.cpp				\
@@ -47,6 +49,7 @@ SRCS		=	main.cpp			\
 				LUSERS.cpp			\
 				VERSION.cpp			\
 				MOTD.cpp			\
+				JOIN.cpp			\
 				)
 INCL		:= $(addprefix $(INCL_PATH), $(INCL))
 SRCS		:= $(addprefix $(SRCS_PATH), $(SRCS))

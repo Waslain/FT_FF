@@ -124,6 +124,25 @@ std::string Server::ERR_NOSUCHSERVER(User &user)
 	return (_numeric(user, "", msg, "402"));
 }
 
+std::string Server::ERR_TOOMANYCHANNELS(User &user, std::string const &channel)
+{
+	std::string	str = channel + " ";
+	std::string	msg = "You have joined too many channels";
+	return (_numeric(user, "",  msg, "405"));
+}
+
+std::string Server::ERR_INPUTTOOLONG(User &user)
+{
+	std::string	msg = "Input line was too long";
+	return (_numeric(user, "", msg, "417"));
+}
+
+std::string Server::ERR_UNKNOWNCOMMAND(User &user, std::string const &cmd)
+{
+	std::string	msg = cmd + ": Unkown command";
+	return (_numeric(user, "", msg, "421"));
+}
+
 std::string Server::ERR_NOMOTD(User &user)
 {
 	std::string	msg = "MOTD file is missing";
@@ -148,6 +167,12 @@ std::string Server::ERR_NICKNAMEINUSE(User &user)
 	return (_numeric(user, "", msg, "433"));
 }
 
+std::string Server::ERR_NOTREGISTERED(User &user)
+{
+	std::string	msg = "You have not registered";
+	return (_numeric(user, "", msg, "451"));
+}
+
 std::string Server::ERR_NEEDMOREPARAMS(User &user, std::string command)
 {
 	std::string	msg = "Not enough parameter";
@@ -164,6 +189,33 @@ std::string Server::ERR_PASSWDMISMATCH(User &user)
 {
 	std::string	msg = "Password incorrect";
 	return (_numeric(user, "",  msg, "464"));
+}
+
+std::string Server::ERR_CHANNELISFULL(User &user, std::string const &channel)
+{
+	std::string	str = channel + " ";
+	std::string	msg = "Channot join channel (+l)";
+	return (_numeric(user, "",  msg, "471"));
+}
+
+std::string Server::ERR_INVITEONLYCHAN(User &user, std::string const &channel)
+{
+	std::string	str = channel + " ";
+	std::string	msg = "Channot join channel (+i)";
+	return (_numeric(user, "",  msg, "473"));
+}
+
+std::string Server::ERR_BADCHANNELKEY(User &user, std::string const &channel)
+{
+	std::string	str = channel + " ";
+	std::string	msg = "Cannot join channel (+k)";
+	return (_numeric(user, "",  msg, "475"));
+}
+
+std::string Server::ERR_BADCHANMASK(User &user)
+{
+	std::string	msg = "Bad Channel Mask";
+	return (_numeric(user, "",  msg, "476"));
 }
 
 std::string Server::ERROR(std::string reason)
@@ -241,13 +293,4 @@ std::string	Server::_ISupportTokens()
 	msg += std::string("TOPICLEN=") + itos(TOPICLEN) + " ";
 	msg += std::string("USERLEN=") + itos(USERLEN) + " ";
 	return (msg);
-}
-
-std::string	itos(int const &i)
-{
-	std::stringstream	ss;
-	std::string			s;
-	ss << i;
-	ss >> s;
-	return (s);
 }

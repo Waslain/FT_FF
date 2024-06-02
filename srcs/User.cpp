@@ -3,7 +3,7 @@
 User::User()
 {}
 
-User::User(int const &fd): _fd(fd), _time(time(NULL)), _canRegister(false), _registered(false), _disconnect(false)
+User::User(int const &fd): _fd(fd), _nbChannels(0), _time(time(NULL)), _canRegister(false), _registered(false), _disconnect(false)
 {
 	std::string	mode = USERMODES;
 	size_t		size = mode.size();
@@ -20,11 +20,13 @@ User::User(User const &cpy)
 }
 
 User::~User()
-{}
+{
+}
 
 User	&User::operator=(User const &cpy)
 {
 	_fd = cpy._fd;
+	_nbChannels = cpy._nbChannels;
 	_nickname = cpy._nickname;
 	_username = cpy._username;
 	_password = cpy._password;
@@ -79,6 +81,11 @@ void	User::setMode(char const &mode, bool const &value)
 int			User::getFd() const
 {
 	return (_fd);
+}
+
+int			User::getNbChannels() const
+{
+	return (_nbChannels);
 }
 
 std::string	User::getNickname() const
@@ -144,4 +151,32 @@ bool		User::disconnect() const
 bool		User::getMode(char const &mode)
 {
 	return (_modes[mode]);
+}
+
+bool		User::isOnChannel(Channel &channel) const
+{
+	if (_channels.find(channel.getName()) == _channels.end()) {
+		return (false);
+	}
+	return (true);
+}
+
+void		User::joinChannel(Channel &channel)
+{
+	std::string	name = channel.getName();
+	_channels[name] = &channel;
+	_nbChannels++;
+}
+
+void		User::leaveChannel(Channel &channel)
+{
+	_channels.erase(channel.getName());
+	_nbChannels--;
+}
+
+void	User::clearChannels()
+{
+	for (chanIt it = _channels.begin(); it != _channels.end(); it++) {
+		it->second->removeUser(*this);
+	}
 }
