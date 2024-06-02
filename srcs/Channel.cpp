@@ -49,9 +49,11 @@ void			Channel::setName(std::string const &name)
 	_name = name;
 }
 
-void			Channel::setTopic(std::string const &topic)
+void			Channel::setTopic(User &user, std::string const &topic)
 {
 	_topic = topic;
+	_topicWho = user.getNickname();
+	_topicTime = time(NULL);
 }
 
 void			Channel::setKey(std::string const &key)
@@ -79,6 +81,11 @@ std::string		Channel::getTopic() const
 	return (_topic);
 }
 
+std::string		Channel::getTopicWho() const
+{
+	return (_topicWho);
+}
+
 std::string		Channel::getKey() const
 {
 	return (_key);
@@ -99,6 +106,11 @@ int				Channel::getUserLimit() const
 	return (_userLimit);
 }
 
+time_t			Channel::getTopicTime() const
+{
+	return (_topicTime);
+}
+
 bool			Channel::isOperator(User &user) const
 {
 	std::vector<User *>::const_iterator	it = _operators.begin();
@@ -114,20 +126,20 @@ void			Channel::addUser(User &user)
 {
 	_users.push_back(&user);
 	_nbUsers++;
-	user.joinChannel(*this);
 }
 
 void			Channel::removeUser(User &user)
 {
 	userIt	it = _users.begin();
 	userIt	ite = _users.end();
-
-	_users.erase(find(it, ite, &user));
+	userIt	itt = find(it, ite, &user);
+	
+	*itt = NULL;
+	_users.erase(itt);
 	_nbUsers--;
 	if (isOperator(user)) {
 		removeOperator(user);
 	}
-	user.leaveChannel(*this);
 }
 
 void			Channel::addOperator(User &user)
@@ -137,8 +149,24 @@ void			Channel::addOperator(User &user)
 
 void			Channel::removeOperator(User &user)
 {
-	userIt	it = _users.begin();
-	userIt	ite = _users.end();
+	userIt	it = _operators.begin();
+	userIt	ite = _operators.end();
+	userIt	itt = find(it, ite, &user);
 
-	_operators.erase(find(it, ite, &user));
+	*itt = NULL;
+	_operators.erase(itt);
+}
+
+void			Channel::send(std::string const &msg)
+{
+	userIt		it = _users.begin();
+	userIt		ite = _users.end();
+	std::string	str;
+
+	for (; it != ite; it++)
+	{
+		str = (*it)->getSendBuf();
+		str += msg;
+		(*it)->setSendBuf(str);
+	}
 }

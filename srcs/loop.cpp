@@ -48,9 +48,7 @@ void	Server::loop()
 		}
 	}
 
-	userIt	it = _users.begin();
-	userIt	ite = _users.end();
-	for (; it != ite; it++) {
-		it->second.clearChannels();
-	}
+	_users.clear();
+	_channels.clear();
+
 }

@@ -5,7 +5,7 @@ void	Server::_MOTD(int const &fd, std::string &args)
 	User	&user = _users[fd];
 
 	if (!args.empty() && args.compare(HOSTNAME)) {
-		_addClientMessage(user, ERR_NOSUCHSERVER(user));
+		_addClientMessage(user, ERR_NOSUCHSERVER(user, args));
 	}
 
 	std::ifstream	file;

@@ -107,6 +107,7 @@ class Server
 		void		_VERSION(int const &fd, std::string &args);
 		void		_MOTD(int const &fd, std::string &args);
 		void		_JOIN(int const &fd, std::string &args);
+		void		_PART(int const &fd, std::string &args);
 
 		//UTILS
 		bool		nick_already_in_use(std::string nick);
@@ -122,9 +123,11 @@ class Server
 		void		_printMessage(std::string msg, std::string str, int const &fd);
 		void 		_parseInput(std::string &str, int const &);
 		void		_addClientMessage(User &user, std::string const &msg);
+		void		_addChannelMessage(Channel &channel, std::string const &msg);
 		void		_checkRegistration(int &fd);
 		void		_registerClient(User &user);
 		void		_joinChannel(User &user, std::string &channel, std::string &key);
+		void		_quitChannel(User &user, std::string const &channel, std::string const &reason);
 
 		// messages
 		std::string	RPL_WELCOME(User &user);
@@ -140,11 +143,14 @@ class Server
 		std::string	RPL_LUSERME(User &user);
 		std::string	RPL_LOCALUSERS(User &user);
 		std::string	RPL_GLOBALUSERS(User &user);
+		std::string RPL_TOPIC(User &user, Channel &channel);
+		std::string RPL_TOPICWHOTIME(User &user, Channel &channel);
 		std::string RPL_VERSION(User &user);
 		std::string RPL_MOTD(User &user, std::string msg);
 		std::string RPL_MOTDSTART(User &user);
 		std::string RPL_ENDOFMOTD(User &user);
-		std::string ERR_NOSUCHSERVER(User &user);
+		std::string ERR_NOSUCHSERVER(User &user, std::string const &);
+		std::string ERR_NOSUCHCHANNEL(User &user, std::string const &);
 		std::string ERR_TOOMANYCHANNELS(User &user, std::string const &channel);
 		std::string ERR_INPUTTOOLONG(User &user);
 		std::string ERR_UNKNOWNCOMMAND(User &user, std::string const &);
@@ -152,6 +158,7 @@ class Server
 		std::string ERR_NONICKNAMEGIVEN(User &user);
 		std::string ERR_ERRONEUSNICKNAME(User &user);
 		std::string ERR_NICKNAMEINUSE(User &user);
+		std::string ERR_NOTONCHANNEL(User &user, std::string const &channel);
 		std::string ERR_NOTREGISTERED(User &user);
 		std::string ERR_NEEDMOREPARAMS(User &user, std::string command);
 		std::string ERR_ALREADYREGISTERED(User &user);
@@ -162,6 +169,8 @@ class Server
 		std::string ERR_BADCHANMASK(User &user);
 		std::string ERROR(std::string msg);
 		std::string	PONG(std::string &token);
+		std::string	JOIN(User &user, std::string const &channel);
+		std::string	PART(User &user, std::string const &channel, std::string const &reason);
 		std::string	_numeric(User &, std::string, std::string &, std::string);
 		std::string	_getDate();
 		std::string	_ISupportTokens();

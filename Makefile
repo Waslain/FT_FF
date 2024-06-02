@@ -50,6 +50,7 @@ SRCS		=	main.cpp			\
 				VERSION.cpp			\
 				MOTD.cpp			\
 				JOIN.cpp			\
+				PART.cpp			\
 				)
 INCL		:= $(addprefix $(INCL_PATH), $(INCL))
 SRCS		:= $(addprefix $(SRCS_PATH), $(SRCS))

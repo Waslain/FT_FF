@@ -22,14 +22,21 @@ void		Server::_joinChannel(User &user, std::string &channel, std::string &key)
 		return ;
 	}
 
+	// if user is already on channel -> don't know what reply is needed here
+	if (user.isOnChannel(channel)) {
+		return ;
+	}
+
 	if (user.getNbChannels() == CHANLIMIT) {
 		_addClientMessage(user, ERR_TOOMANYCHANNELS(user, channel));
 		return ;
 	}
 	
-	// if channel doesn't exist
+	// if channel doesn't exist, create it, else check if we can join it
 	if (_channels.find(channel) == _channels.end()) {
 		_channels[channel] = Channel(user, channel);
+		user.joinChannel(_channels[channel]);
+		_nbChannels++;
 	}
 	else
 	{
@@ -50,8 +57,17 @@ void		Server::_joinChannel(User &user, std::string &channel, std::string &key)
 			return ;
 		}
 		_channels[channel].addUser(user);
+		user.joinChannel(_channels[channel]);
 	}
+
 	// send the replies
+	_addChannelMessage(_channels[channel], JOIN(user, channel));
+	if (!_channels[channel].getTopic().empty())
+	{
+		_addClientMessage(user, RPL_TOPIC(user, _channels[channel]));
+		_addClientMessage(user, RPL_TOPIC(user, _channels[channel]));
+	}
+	// RPL_NAMEREPLY and RPL_ENDOFNAMES not yet implemented
 }
 
 void		Server::_JOIN(int const &fd, std::string &args)
@@ -63,6 +79,12 @@ void		Server::_JOIN(int const &fd, std::string &args)
 	if (channels.empty())
 	{
 		_addClientMessage(user, ERR_NEEDMOREPARAMS(user, "JOIN "));
+		return ;
+	}
+
+	if (!channels.compare("0"))
+	{
+		user.clearChannels("");
 		return ;
 	}
 
