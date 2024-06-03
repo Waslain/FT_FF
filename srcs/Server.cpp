@@ -6,7 +6,7 @@
 /*   By: fduzant <fduzant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 19:26:47 by fduzant           #+#    #+#             */
-/*   Updated: 2024/06/03 18:29:54 by fduzant          ###   ########.fr       */
+/*   Updated: 2024/06/03 18:41:15 by fduzant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void Server::_initCmdMap()
 	//_cmdmap["HELP"] = &Server::_HELP;
 	//_cmdmap["INFO"] = &Server::_INFO;
 	//_cmdmap["MODE"] = &Server::_MODE;
-	_cmdmap["PRIVMSG"] = &Server::_PRIVMSG;
+	_cmdmap["PRIVMSG"] = &Server::_PRIVMSG; // Not complete
 	//_cmdmap["NOTICE"] = &Server::_NOTICE;
 	//_cmdmap["WHO"] = &Server::_WHO;
 	//_cmdmap["WHOIS"] = &Server::_WHOIS;
