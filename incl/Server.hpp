@@ -6,7 +6,7 @@
 /*   By: fduzant <fduzant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 19:26:42 by fduzant           #+#    #+#             */
-/*   Updated: 2024/05/30 16:19:42 by fduzant          ###   ########.fr       */
+/*   Updated: 2024/06/03 18:32:13 by fduzant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ class Server
 		
 		void	loop();
 
+		User &getUserByNick(const std::string &nick);
+		Channel &getChannel(const std::string &chan);
 	private:
 	
 		Server();
@@ -81,6 +83,7 @@ class Server
 		Server &operator=(const Server &src);
 
 		typedef std::map<int, User>::iterator	userIt;
+		typedef std::map<std::string, Channel>::iterator	channelIt;
 
 		std::string				 		_pass;
 		std::string						_host;
@@ -108,6 +111,7 @@ class Server
 		void		_MOTD(int const &fd, std::string &args);
 		void		_JOIN(int const &fd, std::string &args);
 		void		_PART(int const &fd, std::string &args);
+		void		_PRIVMSG(int const &fd, std::string &args);
 
 		//UTILS
 		bool		nick_already_in_use(std::string nick);
@@ -128,6 +132,7 @@ class Server
 		void		_registerClient(User &user);
 		void		_joinChannel(User &user, std::string &channel, std::string &key);
 		void		_quitChannel(User &user, std::string const &channel, std::string const &reason);
+		void		_privmsgprocess(User user, std::string &target, std::string &msg);
 
 		// messages
 		std::string	RPL_WELCOME(User &user);
@@ -149,9 +154,12 @@ class Server
 		std::string RPL_MOTD(User &user, std::string msg);
 		std::string RPL_MOTDSTART(User &user);
 		std::string RPL_ENDOFMOTD(User &user);
+		std::string ERR_NOSUCHNICK(User &user, std::string const &nick);
 		std::string ERR_NOSUCHSERVER(User &user, std::string const &);
 		std::string ERR_NOSUCHCHANNEL(User &user, std::string const &);
 		std::string ERR_TOOMANYCHANNELS(User &user, std::string const &channel);
+		std::string ERR_NORECIPIENT(User &user, std::string const &command);
+		std::string ERR_NOTEXTTOSEND(User &user);
 		std::string ERR_INPUTTOOLONG(User &user);
 		std::string ERR_UNKNOWNCOMMAND(User &user, std::string const &);
 		std::string ERR_NOMOTD(User &user);
@@ -170,6 +178,7 @@ class Server
 		std::string ERROR(std::string msg);
 		std::string	PONG(std::string &token);
 		std::string	JOIN(User &user, std::string const &channel);
+		std::string	PRIVMSG(User &user, User &target, std::string const &msg);
 		std::string	PART(User &user, std::string const &channel, std::string const &reason);
 		std::string	_numeric(User &, std::string, std::string &, std::string);
 		std::string	_getDate();
@@ -187,5 +196,7 @@ class	emptyException: public std::exception
 
 std::string	getFirstWord(std::string &str);
 std::string	itos(int const &i);
+std::vector<std::string> split(std::string str, char c);
+std::string buildmsg(std::vector<std::string> args);
 void		strToupper(std::string &str);
 bool		is_valid_nick(std::string nick);
