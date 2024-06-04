@@ -132,6 +132,13 @@ std::string Server::RPL_ENDOFMOTD(User &user)
 	return (_numeric(user, "", msg, "376"));
 }
 
+std::string Server::ERR_NOSUCHNICK(User &user, std::string const &nick)
+{
+	std::string	str = nick + " ";
+	std::string	msg = "No such nick/channel";
+	return (_numeric(user, str, msg, "401"));
+}
+
 std::string Server::ERR_NOSUCHSERVER(User &user, std::string const &server)
 {
 	std::string	str = server + " ";
@@ -151,6 +158,18 @@ std::string Server::ERR_TOOMANYCHANNELS(User &user, std::string const &channel)
 	std::string	str = channel + " ";
 	std::string	msg = "You have joined too many channels";
 	return (_numeric(user, "",  msg, "405"));
+}
+
+std::string Server::ERR_NORECIPIENT(User &user, std::string const &command)
+{
+	std::string	msg = "No recipient given (" + command + ")";
+	return (_numeric(user, "", msg, "411"));
+}
+
+std::string Server::ERR_NOTEXTTOSEND(User &user)
+{
+	std::string	msg = "No text to send";
+	return (_numeric(user, "",  msg, "412"));
 }
 
 std::string Server::ERR_INPUTTOOLONG(User &user)
@@ -262,6 +281,12 @@ std::string	Server::PONG(std::string &token)
 std::string	Server::JOIN(User &user, std::string const &channel)
 {
 	std::string	msg = std::string(":") + user.getNickname() + "!" + user.getUsername() + "@localhost JOIN " + channel + "\r\n";
+	return (msg);
+}
+
+std::string	Server::PRIVMSG(User &user, User &target, std::string const &pvmsg)
+{
+	std::string msg = std::string(":localhost 1000") + user.getNickname() + " :" + target.getNickname() + " PRIVMSG " + user.getNickname() + " :" + pvmsg + "\r\n"; 
 	return (msg);
 }
 

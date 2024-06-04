@@ -53,3 +53,27 @@ std::string	itos(int const &i)
 	ss >> s;
 	return (s);
 }
+
+std::vector<std::string> split(std::string str, char c)
+{
+	std::string s;
+	std::stringstream ss(str);
+	std::vector<std::string> args;
+	while (getline(ss, s, c))
+	{
+		args.push_back(s);
+	}
+	return (args);
+}
+
+std::string buildmsg(std::vector<std::string> args)
+{
+	std::string msg;
+	for (size_t i = 1; i < args.size(); i++)
+	{
+		msg += args[i];
+		if (i + 1 < args.size())
+			msg += " ";
+	}
+	return (msg);
+}

@@ -51,6 +51,7 @@ SRCS		=	main.cpp			\
 				MOTD.cpp			\
 				JOIN.cpp			\
 				PART.cpp			\
+				PRIVMSG.cpp			\
 				)
 INCL		:= $(addprefix $(INCL_PATH), $(INCL))
 SRCS		:= $(addprefix $(SRCS_PATH), $(SRCS))

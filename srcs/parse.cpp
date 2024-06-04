@@ -22,15 +22,16 @@ void Server::_parseInput(std::string &str, int const &fd)
 	}
 
 	strToupper(cmd);
+
+	if (_cmdmap.find(cmd) == _cmdmap.end())
+	{
+		_addClientMessage(user, ERR_UNKNOWNCOMMAND(user, cmd));
+		return ;
+	}
 	if (!_users[fd].isRegistered() && cmd.compare("CAP") && cmd.compare("PASS") && cmd.compare("NICK") && cmd.compare("USER"))
 	{
 		_addClientMessage(user, ERR_NOTREGISTERED(user));
 		return ;
 	}
-	if (_cmdmap[cmd] != NULL) {
-		(*this.*_cmdmap[cmd])(fd, str);
-	}
-	else {
-		_addClientMessage(user, ERR_UNKNOWNCOMMAND(user, cmd));
-	}
+	(*this.*_cmdmap[cmd])(fd, str);
 }
