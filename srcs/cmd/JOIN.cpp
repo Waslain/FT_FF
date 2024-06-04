@@ -3,7 +3,7 @@
 bool		isChannelNameValid(std::string &channel)
 {
 	std::string	set = "\a,";
-	if (channel.size() > CHANNELLEN) {
+	if (channel.size() > CHANNELLEN || channel.size() <= 1) {
 		return (false);
 	}
 	if (channel.empty() || channel[0] != '#') {
@@ -105,6 +105,9 @@ void		Server::_JOIN(int const &fd, std::string &args)
 		keys.erase(0, pos + 1);
 		if (pos == std::string::npos) {
 			keys.clear();
+		}
+		if (channel.empty()) {
+			continue ;
 		}
 		_joinChannel(user, channel, key);
 	}
