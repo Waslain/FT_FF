@@ -46,7 +46,21 @@ void	Server::_PRIVMSG(int const &fd, std::string &args)
 		
 		if (DEBUG)
 			std::cout << "PRIVMSG: message: " << privmsg << std::endl;
-		_privmsgprocess(user, splited[0], privmsg);
+
+		std::string	target;
+		size_t		pos = 0;
+		while (!splited[0].empty())
+		{
+			pos = splited[0].find(',');
+			target = splited[0].substr(0, pos);
+			splited[0].erase(0, pos + 1);
+			if (pos == std::string::npos) {
+				splited[0].clear();
+			}
+			if (!target.empty()) {
+				_privmsgprocess(user, target, privmsg);
+			}
+		}
 	}
 }
 
