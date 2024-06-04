@@ -165,8 +165,6 @@ void			Channel::send(User &source, std::string const &msg, int const &mode)
 
 	for (; it != ite; it++)
 	{
-		std::cout << *it << std::endl;
-		std::cout << &source << std::endl;
 		if (mode == OTHER && *it == &source) {
 			continue ;
 		}
