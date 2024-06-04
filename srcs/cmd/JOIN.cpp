@@ -61,7 +61,7 @@ void		Server::_joinChannel(User &user, std::string &channel, std::string &key)
 	}
 
 	// send the replies
-	_addChannelMessage(_channels[channel], JOIN(user, channel));
+	_addChannelMessage(user, _channels[channel], JOIN(user, channel), ALL);
 	if (!_channels[channel].getTopic().empty())
 	{
 		_addClientMessage(user, RPL_TOPIC(user, _channels[channel]));

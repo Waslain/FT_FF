@@ -179,7 +179,7 @@ void		User::leaveChannel(Channel &channel)
 void	User::clearChannels(std::string const &reason)
 {
 	for (chanIt it = _channels.begin(); it != _channels.end(); it++) {
-		it->second->send(PART(*this, it->second->getName(), reason));
+		it->second->send(*this, PART(*this, it->second->getName(), reason), ALL);
 		it->second->removeUser(*this);
 	}
 	_channels.clear();

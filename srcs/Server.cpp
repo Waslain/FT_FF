@@ -72,9 +72,9 @@ void	Server::_addClientMessage(User &user, std::string const &msg)
 	user.setSendBuf(tmp);
 }
 
-void	Server::_addChannelMessage(Channel &channel, std::string const &msg)
+void	Server::_addChannelMessage(User &user, Channel &channel, std::string const &msg, int const &mode)
 {
-	channel.send(msg);
+	channel.send(user, msg, mode);
 }
 
 Channel &Server::getChannel(const std::string &chan)

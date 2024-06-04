@@ -157,7 +157,7 @@ void			Channel::removeOperator(User &user)
 	_operators.erase(itt);
 }
 
-void			Channel::send(std::string const &msg)
+void			Channel::send(User &source, std::string const &msg, int const &mode)
 {
 	userIt		it = _users.begin();
 	userIt		ite = _users.end();
@@ -165,6 +165,11 @@ void			Channel::send(std::string const &msg)
 
 	for (; it != ite; it++)
 	{
+		std::cout << *it << std::endl;
+		std::cout << &source << std::endl;
+		if (mode == OTHER && *it == &source) {
+			continue ;
+		}
 		str = (*it)->getSendBuf();
 		str += msg;
 		(*it)->setSendBuf(str);
