@@ -16,7 +16,7 @@ void	Server::_quitChannel(User &user, std::string const &channame, std::string c
 
 	Channel	&channel = _channels[channame];
 
-	_addChannelMessage(channel, PART(user, channame, reason));
+	_addChannelMessage(user, channel, PART(user, channame, reason), ALL);
 	user.leaveChannel(channel);
 	channel.removeUser(user);
 	if (channel.getNbUsers() == 0)

@@ -19,12 +19,7 @@ void	Server::_PRIVMSG(int const &fd, std::string &args)
 	if (DEBUG) {
 		std::cout << "PRIVMSG received from user[" << fd << "]" << std::endl;
 	}
-	if (user.isRegistered() == false || user.getNickname().empty())
-	{
-		std::cout << "PRIVMSG: user not registered" << std::endl;
-		_addClientMessage(user, ERR_NOTREGISTERED(user));
-		return ;
-	}
+
 	std::vector<std::string> splited = split(args, ' ');
 	if (splited.size() == 0)
 	{
@@ -55,25 +50,23 @@ void	Server::_PRIVMSG(int const &fd, std::string &args)
 	}
 }
 
-void Server::_privmsgprocess(User user, std::string &target, std::string &msg)
+void Server::_privmsgprocess(User &user, std::string &target, std::string &msg)
 {
 	if (target[0] == '#')
 	{
-		// channel
-		// try {
-		// 	Channel &target_channel = getChannel(target);
-		// 	// _addClientMessage(target_channel, PRIVMSG(user, target_channel, msg));
-		// }catch (std::exception &e) {
-		// 	if (e.what())
-		// 		// _addClientMessage(user, ERR_CANNOTSENDTOCHAN(user, target));
-		// }                                                                    
+		if (_channels.find(target) == _channels.end() || user.isOnChannel(target) == false)
+		{
+			_addClientMessage(user, ERR_CANNOTSENDTOCHAN(user, target));
+			return ;
+		}
+		_addChannelMessage(user, _channels[target], PRIVMSG(user, target, msg), OTHER);
 	}
 	else
 	{
 		// user
 		try {
 			User &target_user = getUserByNick(target);
-			_addClientMessage(target_user, PRIVMSG(user, target_user, msg));
+			_addClientMessage(target_user, PRIVMSG(user, target_user.getNickname(), msg));
 		}catch (std::exception &e) {
 			if (e.what())
 				_addClientMessage(user, ERR_NOSUCHNICK(user, target));

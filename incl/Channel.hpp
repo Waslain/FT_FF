@@ -33,7 +33,7 @@ class	Channel
 		void					removeUser(User &);
 		void					addOperator(User &);
 		void					removeOperator(User &);
-		void					send(std::string const &msg);
+		void					send(User &source, std::string const &msg, int const &mode);
 
 	private:
 		std::string				_name;

@@ -40,6 +40,8 @@
 # define DEBUG 0
 #endif
 
+#define ALL 0
+#define OTHER 1
 #define TIMEOUT 10
 #define VERSION std::string("ircserv-1.42.0")
 #define HOSTNAME std::string("ft_irc")
@@ -127,12 +129,12 @@ class Server
 		void		_printMessage(std::string msg, std::string str, int const &fd);
 		void 		_parseInput(std::string &str, int const &);
 		void		_addClientMessage(User &user, std::string const &msg);
-		void		_addChannelMessage(Channel &channel, std::string const &msg);
+		void		_addChannelMessage(User &user, Channel &, std::string const &, int const &);
 		void		_checkRegistration(int &fd);
 		void		_registerClient(User &user);
 		void		_joinChannel(User &user, std::string &channel, std::string &key);
 		void		_quitChannel(User &user, std::string const &channel, std::string const &reason);
-		void		_privmsgprocess(User user, std::string &target, std::string &msg);
+		void		_privmsgprocess(User &user, std::string &target, std::string &msg);
 
 		// messages
 		std::string	RPL_WELCOME(User &user);
@@ -157,6 +159,7 @@ class Server
 		std::string ERR_NOSUCHNICK(User &user, std::string const &nick);
 		std::string ERR_NOSUCHSERVER(User &user, std::string const &);
 		std::string ERR_NOSUCHCHANNEL(User &user, std::string const &);
+		std::string ERR_CANNOTSENDTOCHAN(User &user, std::string const &channel);
 		std::string ERR_TOOMANYCHANNELS(User &user, std::string const &channel);
 		std::string ERR_NORECIPIENT(User &user, std::string const &command);
 		std::string ERR_NOTEXTTOSEND(User &user);
@@ -178,7 +181,7 @@ class Server
 		std::string ERROR(std::string msg);
 		std::string	PONG(std::string &token);
 		std::string	JOIN(User &user, std::string const &channel);
-		std::string	PRIVMSG(User &user, User &target, std::string const &msg);
+		std::string	PRIVMSG(User &user, std::string const &, std::string const &msg);
 		std::string	PART(User &user, std::string const &channel, std::string const &reason);
 		std::string	_numeric(User &, std::string, std::string &, std::string);
 		std::string	_getDate();

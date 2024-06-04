@@ -153,6 +153,13 @@ std::string Server::ERR_NOSUCHCHANNEL(User &user, std::string const &channel)
 	return (_numeric(user, "", msg, "403"));
 }
 
+std::string Server::ERR_CANNOTSENDTOCHAN(User &user, std::string const &channel)
+{
+	std::string	str = channel + " ";
+	std::string	msg = "Cannot send to channel";
+	return (_numeric(user, "", msg, "404"));
+}
+
 std::string Server::ERR_TOOMANYCHANNELS(User &user, std::string const &channel)
 {
 	std::string	str = channel + " ";
@@ -180,7 +187,7 @@ std::string Server::ERR_INPUTTOOLONG(User &user)
 
 std::string Server::ERR_UNKNOWNCOMMAND(User &user, std::string const &cmd)
 {
-	std::string	msg = cmd + ": Unkown command";
+	std::string	msg = cmd + ": Unknown command";
 	return (_numeric(user, "", msg, "421"));
 }
 
@@ -284,9 +291,9 @@ std::string	Server::JOIN(User &user, std::string const &channel)
 	return (msg);
 }
 
-std::string	Server::PRIVMSG(User &user, User &target, std::string const &pvmsg)
+std::string	Server::PRIVMSG(User &user, std::string const &target, std::string const &pvmsg)
 {
-	std::string msg = std::string(":localhost 1000") + user.getNickname() + " :" + target.getNickname() + " PRIVMSG " + user.getNickname() + " :" + pvmsg + "\r\n"; 
+	std::string msg = std::string(":") + user.getNickname() + "!" + user.getUsername() + "@localhost PRIVMSG " + target + " " + pvmsg + "\r\n"; 
 	return (msg);
 }
 
@@ -307,8 +314,7 @@ std::string	Server::_numeric(User &user, std::string str1, std::string &str2, st
 }
 
 std::string	Server::_getDate()
-{
-	std::string			str;
+{ std::string			str;
 	std::string			tmp;
 	std::stringstream	ss;
 	struct tm 			*tm = localtime(&_time);
