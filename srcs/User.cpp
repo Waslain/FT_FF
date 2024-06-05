@@ -148,9 +148,9 @@ bool		User::disconnect() const
 	return (_disconnect);
 }
 
-bool		User::getMode(char const &mode)
+bool		User::getMode(char const &mode) const
 {
-	return (_modes[mode]);
+	return (_modes.find(mode)->second);
 }
 
 bool		User::isOnChannel(std::string const &channel) const
@@ -159,6 +159,15 @@ bool		User::isOnChannel(std::string const &channel) const
 		return (false);
 	}
 	return (true);
+}
+
+bool		User::isOperator(std::string const &channel) const
+{
+	chanConstIt	it = _channels.find(channel);
+	if (it == _channels.end()) {
+		return (false);
+	}
+	return (it->second->isOperator(*this));
 }
 
 void		User::joinChannel(Channel &channel)

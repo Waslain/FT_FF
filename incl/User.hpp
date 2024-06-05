@@ -37,8 +37,9 @@ class	User
 		bool								canRegister() const;
 		bool								isRegistered() const;
 		bool								disconnect() const;
-		bool								getMode(char const &);
+		bool								getMode(char const &) const;
 		bool								isOnChannel(std::string const &) const;
+		bool								isOperator(std::string const &) const;
 
 		void								joinChannel(Channel &);
 		void								leaveChannel(Channel &);
@@ -60,7 +61,8 @@ class	User
 		std::map<char, bool>				_modes;
 		std::map<std::string, Channel *>	_channels;
 
-		typedef std::map<std::string, Channel *>::iterator	chanIt;
+		typedef std::map<std::string, Channel *>::iterator			chanIt;
+		typedef std::map<std::string, Channel *>::const_iterator	chanConstIt;
 
 		std::string	PART(User &user, std::string const &channel, std::string const &reason);
 };

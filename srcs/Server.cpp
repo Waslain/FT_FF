@@ -23,12 +23,12 @@ void Server::_initCmdMap()
 	_cmdmap["LUSERS"] = &Server::_LUSERS;
 	_cmdmap["VERSION"] = &Server::_VERSION;
 	_cmdmap["MOTD"] = &Server::_MOTD;
-	_cmdmap["JOIN"] = &Server::_JOIN;	// not complete
+	_cmdmap["JOIN"] = &Server::_JOIN;
 	_cmdmap["PART"] = &Server::_PART;
+	_cmdmap["NAMES"] = &Server::_NAMES;
+	_cmdmap["TOPIC"] = &Server::_TOPIC;
 
 	//_cmdmap["OPER"] = &Server::_OPER;
-	//_cmdmap["TOPIC"] = &Server::_TOPIC;
-	//_cmdmap["NAMES"] = &Server::_NAMES;
 	//_cmdmap["LIST"] = &Server::_LIST;
 	//_cmdmap["INVITE"] = &Server::_INVITE;
 	//_cmdmap["KICK"] = &Server::_KICK;
@@ -79,8 +79,8 @@ void	Server::_addChannelMessage(User &user, Channel &channel, std::string const 
 
 Channel &Server::getChannel(const std::string &chan)
 {
-	channelIt	it = _channels.begin();
-	channelIt	ite = _channels.end();
+	chanIt	it = _channels.begin();
+	chanIt	ite = _channels.end();
 	for (; it != ite; it++) {
 		if (it->second.getName() == chan) {
 			if (DEBUG)
