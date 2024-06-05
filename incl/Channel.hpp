@@ -23,11 +23,12 @@ class	Channel
 		std::string				getTopic() const;
 		std::string				getTopicWho() const;
 		std::string				getKey() const;
-		bool					getMode(char const &);
+		bool					getMode(char const &) const;
 		int						getNbUsers() const;
 		int						getUserLimit() const;
 		time_t					getTopicTime() const;
-		bool					isOperator(User &user) const;
+		std::string				getUsers(User const &user) const;
+		bool					isOperator(User const &user) const;
 
 		void					addUser(User &);
 		void					removeUser(User &);
@@ -47,5 +48,6 @@ class	Channel
 		std::vector<User *>		_users;
 		std::vector<User *>		_operators;
 
-		typedef std::vector<User *>::iterator	userIt;
+		typedef std::vector<User *>::iterator		userIt;
+		typedef std::vector<User *>::const_iterator	userConstIt;
 };

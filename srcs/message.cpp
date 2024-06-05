@@ -94,6 +94,13 @@ std::string	Server::RPL_GLOBALUSERS(User &user)
 	return (_numeric(user, str, msg, "266"));
 }
 
+std::string Server::RPL_NOTOPIC(User &user, Channel &channel)
+{
+	std::string	str = channel.getName() + " ";
+	std::string	msg = "No topic is set";
+	return (_numeric(user, str, msg, "332"));
+}
+
 std::string Server::RPL_TOPIC(User &user, Channel &channel)
 {
 	std::string	str = channel.getName() + " ";
@@ -113,6 +120,20 @@ std::string Server::RPL_VERSION(User &user)
 	std::string	str = VERSION + " " + HOSTNAME + " ";
 	std::string	msg = "";
 	return (_numeric(user, str, msg, "351"));
+}
+
+std::string Server::RPL_NAMEREPLY(User &user, std::string const &channame)
+{
+	std::string	str = std::string("= ") + channame + " ";
+	std::string	msg = _channels[channame].getUsers(user);
+	return (_numeric(user, str, msg, "353"));
+}
+
+std::string Server::RPL_ENDOFNAMES(User &user, std::string const &channame)
+{
+	std::string	str = channame + " ";
+	std::string	msg = "End of /NAMES list";
+	return (_numeric(user, str, msg, "366"));
 }
 
 std::string Server::RPL_MOTD(User &user, std::string msg)
@@ -273,6 +294,13 @@ std::string Server::ERR_BADCHANMASK(User &user)
 	return (_numeric(user, "",  msg, "476"));
 }
 
+std::string Server::ERR_CHANOPRIVSNEEDED(User &user, std::string const &channel)
+{
+	std::string	str = channel + " ";
+	std::string	msg = "You're not channel operator";
+	return (_numeric(user, "",  msg, "482"));
+}
+
 std::string Server::ERROR(std::string reason)
 {
 	std::string	msg = "ERROR :" + reason + "\r\n";
@@ -357,7 +385,7 @@ std::string	Server::_ISupportTokens()
 	// MAXTARGETS
 	// MODES
 	msg += std::string("NICKLEN=") + itos(NICKLEN) + " ";
-	// PREFIX
+	msg += std::string("PREFIX=(o)@ ");
 	// SAFELIST
 	// SILENCE
 	// STATUSMSG

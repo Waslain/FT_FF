@@ -50,7 +50,7 @@
 
 #define AWAYLEN 350
 #define CHANLIMIT 5
-#define	CHANMODES std::string("iklot")
+#define	CHANMODES std::string("it")
 #define CHANNELLEN 50
 #define HOSTLEN 50
 #define KICKLEN 350
@@ -85,7 +85,7 @@ class Server
 		Server &operator=(const Server &src);
 
 		typedef std::map<int, User>::iterator	userIt;
-		typedef std::map<std::string, Channel>::iterator	channelIt;
+		typedef std::map<std::string, Channel>::iterator	chanIt;
 
 		std::string				 		_pass;
 		std::string						_host;
@@ -114,6 +114,8 @@ class Server
 		void		_JOIN(int const &fd, std::string &args);
 		void		_PART(int const &fd, std::string &args);
 		void		_PRIVMSG(int const &fd, std::string &args);
+		void		_NAMES(int const &fd, std::string &args);
+		void		_TOPIC(int const &fd, std::string &args);
 
 		//UTILS
 		bool		nick_already_in_use(std::string nick);
@@ -135,6 +137,7 @@ class Server
 		void		_joinChannel(User &user, std::string &channel, std::string &key);
 		void		_quitChannel(User &user, std::string const &channel, std::string const &reason);
 		void		_privmsgprocess(User &user, std::string &target, std::string &msg);
+		void		_sendName(User &user, std::string const &channame);
 
 		// messages
 		std::string	RPL_WELCOME(User &user);
@@ -150,9 +153,12 @@ class Server
 		std::string	RPL_LUSERME(User &user);
 		std::string	RPL_LOCALUSERS(User &user);
 		std::string	RPL_GLOBALUSERS(User &user);
+		std::string RPL_NOTOPIC(User &user, Channel &channel);
 		std::string RPL_TOPIC(User &user, Channel &channel);
 		std::string RPL_TOPICWHOTIME(User &user, Channel &channel);
 		std::string RPL_VERSION(User &user);
+		std::string RPL_NAMEREPLY(User &user, std::string const &);
+		std::string RPL_ENDOFNAMES(User &user, std::string const &channame);
 		std::string RPL_MOTD(User &user, std::string msg);
 		std::string RPL_MOTDSTART(User &user);
 		std::string RPL_ENDOFMOTD(User &user);
@@ -178,6 +184,7 @@ class Server
 		std::string ERR_INVITEONLYCHAN(User &user, std::string const &channel);
 		std::string ERR_BADCHANNELKEY(User &user, std::string const &channel);
 		std::string ERR_BADCHANMASK(User &user);
+		std::string ERR_CHANOPRIVSNEEDED(User &user, std::string const &channel);
 		std::string ERROR(std::string msg);
 		std::string	PONG(std::string &token);
 		std::string	JOIN(User &user, std::string const &channel);

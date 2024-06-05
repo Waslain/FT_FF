@@ -65,9 +65,11 @@ void		Server::_joinChannel(User &user, std::string &channel, std::string &key)
 	if (!_channels[channel].getTopic().empty())
 	{
 		_addClientMessage(user, RPL_TOPIC(user, _channels[channel]));
-		_addClientMessage(user, RPL_TOPIC(user, _channels[channel]));
+		_addClientMessage(user, RPL_TOPICWHOTIME(user, _channels[channel]));
 	}
-	// RPL_NAMEREPLY and RPL_ENDOFNAMES not yet implemented
+	_addClientMessage(user, RPL_NAMEREPLY(user, channel));
+	_addClientMessage(user, RPL_ENDOFNAMES(user, channel));
+
 }
 
 void		Server::_JOIN(int const &fd, std::string &args)

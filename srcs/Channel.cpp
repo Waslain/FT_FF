@@ -1,14 +1,7 @@
 #include "Channel.hpp"
 
-Channel::Channel(): _nbUsers(0), _userLimit(-1)
-{
-	std::string	mode = CHANMODES;
-	size_t		size = mode.size();
-
-	for (size_t i = 0; i < size; i++) {
-		_modes[mode[i]] = false;
-	}
-}
+Channel::Channel()
+{}
 
 Channel::Channel(User &user, std::string const &name): _name(name), _nbUsers(0), _userLimit(-1)
 {
@@ -18,6 +11,8 @@ Channel::Channel(User &user, std::string const &name): _name(name), _nbUsers(0),
 	for (size_t i = 0; i < size; i++) {
 		_modes[mode[i]] = false;
 	}
+
+	_modes['t'] = true;
 
 	addUser(user);
 	addOperator(user);
@@ -91,9 +86,13 @@ std::string		Channel::getKey() const
 	return (_key);
 }
 
-bool			Channel::getMode(char const &mode)
+bool			Channel::getMode(char const &mode) const
 {
-	return (_modes[mode]);
+	std::map<char, bool>::const_iterator	it = _modes.find(mode);
+	if (it == _modes.end()) {
+		return (false);
+	}
+	return (it->second);
 }
 
 int				Channel::getNbUsers() const
@@ -111,10 +110,30 @@ time_t			Channel::getTopicTime() const
 	return (_topicTime);
 }
 
-bool			Channel::isOperator(User &user) const
+std::string		Channel::getUsers(User const &user) const
 {
-	std::vector<User *>::const_iterator	it = _operators.begin();
-	std::vector<User *>::const_iterator	ite = _operators.end();
+	userConstIt	it = _users.begin();
+	userConstIt	ite = _users.end();
+	std::string	str;
+
+	for (; it != ite; it++)
+	{
+		if ((*it)->getMode('i') == true && user.isOnChannel(_name) == false) {
+			continue ;
+		}
+		str += ((*it)->isOperator(_name) ? "@" : "") + (*it)->getNickname();
+		if (it + 1 == ite) {
+			continue ;
+		}
+		str += " ";
+	}
+	return (str);
+}
+
+bool			Channel::isOperator(User const &user) const
+{
+	userConstIt	it = _operators.begin();
+	userConstIt	ite = _operators.end();
 
 	if (find(it, ite, &user) == ite) {
 		return (false);
