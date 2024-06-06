@@ -325,6 +325,12 @@ std::string	Server::PRIVMSG(User &user, std::string const &target, std::string c
 	return (msg);
 }
 
+std::string	Server::KICK(User &user, std::string const &channel, std::string const &target, std::string const &comment)
+{
+	std::string	msg = std::string(":") + user.getNickname() + "!" + user.getUsername() + "@localhost KICK " + channel + " " + target + " " + comment + "\r\n";
+	return (msg);
+}
+
 std::string	Server::PART(User &user, std::string const &channel, std::string const &reason)
 {
 	std::string	msg = std::string(":") + user.getNickname() + "!" + user.getUsername() + "@localhost PART " + channel + (reason.empty() ? "" : " ") + reason + "\r\n";
