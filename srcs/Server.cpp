@@ -27,6 +27,8 @@ void Server::_initCmdMap()
 	_cmdmap["PART"] = &Server::_PART;
 	_cmdmap["NAMES"] = &Server::_NAMES;
 	_cmdmap["TOPIC"] = &Server::_TOPIC;
+	_cmdmap["PRIVMSG"] = &Server::_PRIVMSG;
+	_cmdmap["MODE"] = &Server::_MODE;
 
 	//_cmdmap["OPER"] = &Server::_OPER;
 	//_cmdmap["LIST"] = &Server::_LIST;
@@ -37,8 +39,6 @@ void Server::_initCmdMap()
 	//_cmdmap["STATS"] = &Server::_STATS;
 	//_cmdmap["HELP"] = &Server::_HELP;
 	//_cmdmap["INFO"] = &Server::_INFO;
-	//_cmdmap["MODE"] = &Server::_MODE;
-	_cmdmap["PRIVMSG"] = &Server::_PRIVMSG; // Not complete
 	//_cmdmap["NOTICE"] = &Server::_NOTICE;
 	//_cmdmap["WHO"] = &Server::_WHO;
 	//_cmdmap["WHOIS"] = &Server::_WHOIS;
@@ -106,4 +106,18 @@ User &Server::getUserByNick(const std::string &nick)
 		}
 	}
 	throw std::runtime_error("getUserByNick: user not found");
+}
+
+bool	Server::_isNickOnServer(std::string const &nick) const
+{
+	userConstIt	it = _users.begin();
+	userConstIt ite = _users.end();
+
+	for (; it != ite; it++)
+	{
+		if (it->second.getNickname().compare(nick) == 0) {
+			return (true);
+		}
+	}
+	return (false);
 }

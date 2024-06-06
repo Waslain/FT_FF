@@ -84,7 +84,8 @@ class Server
 		Server(const Server &copy);
 		Server &operator=(const Server &src);
 
-		typedef std::map<int, User>::iterator	userIt;
+		typedef std::map<int, User>::iterator				userIt;
+		typedef std::map<int, User>::const_iterator			userConstIt;
 		typedef std::map<std::string, Channel>::iterator	chanIt;
 
 		std::string				 		_pass;
@@ -116,6 +117,7 @@ class Server
 		void		_PRIVMSG(int const &fd, std::string &args);
 		void		_NAMES(int const &fd, std::string &args);
 		void		_TOPIC(int const &fd, std::string &args);
+		void		_MODE(int const &fd, std::string &args);
 		void		_KICK(int const &fd, std::string &args);
 
 		//UTILS
@@ -139,6 +141,9 @@ class Server
 		void		_quitChannel(User &user, std::string const &channel, std::string const &reason);
 		void		_privmsgprocess(User &user, std::string &target, std::string &msg);
 		void		_sendName(User &user, std::string const &channame);
+		bool		_isNickOnServer(std::string const &nick) const;
+		void		_userModes(User &user, std::string const &target, std::string &args);
+		void		_channelModes(User &user, std::string const &target, std::string &args);
 
 		// messages
 		std::string	RPL_WELCOME(User &user);
@@ -186,13 +191,16 @@ class Server
 		std::string ERR_BADCHANNELKEY(User &user, std::string const &channel);
 		std::string ERR_BADCHANMASK(User &user);
 		std::string ERR_CHANOPRIVSNEEDED(User &user, std::string const &channel);
+		std::string ERR_UMODEUNKNOWNFLAG(User &user);
+		std::string ERR_USERDONTMATCH(User &user);
 		std::string ERROR(std::string msg);
 		std::string	PONG(std::string &token);
 		std::string	JOIN(User &user, std::string const &channel);
-		std::string	PRIVMSG(User &user, std::string const &, std::string const &msg);
-		std::string	KICK(User &user, std::string const &channel, std::string const &target, std::string const &comment);
 		std::string	PART(User &user, std::string const &channel, std::string const &reason);
-		std::string	_numeric(User &, std::string, std::string &, std::string);
+    std::string	KICK(User &user, std::string const &channel, std::string const &target, std::string const &comment);
+		std::string	PRIVMSG(User &user, std::string const &, std::string const &msg);
+		std::string	MODE(User &user, std::string const &, std::string const &);
+		std::string	_numeric(User &, std::string const &, std::string const &, std::string);
 		std::string	_getDate();
 		std::string	_ISupportTokens();
 };

@@ -33,17 +33,15 @@ std::string	Server::RPL_ISUPPORT(User &user)
 
 std::string	Server::RPL_UMODEIS(User &user)
 {
-	std::string	msg = ":localhost 221 ";
-	msg += (user.getNickname().empty()) ? "*" : user.getNickname() + " ";
+	std::string	str;
 	std::string	modes = USERMODES;
 	size_t		size = modes.size();
 	for (size_t i = 0; i < size; i++) {
 		if (user.getMode(modes[i])) {
-			msg += modes[i];
+			str += modes[i];
 		}
 	}
-	msg += + "\r\n";
-	return (msg);
+	return (_numeric(user, str, "", "221"));
 }
 
 std::string	Server::RPL_LUSERCLIENT(User &user)
@@ -271,21 +269,21 @@ std::string Server::ERR_CHANNELISFULL(User &user, std::string const &channel)
 {
 	std::string	str = channel + " ";
 	std::string	msg = "Channot join channel (+l)";
-	return (_numeric(user, "",  msg, "471"));
+	return (_numeric(user, str,  msg, "471"));
 }
 
 std::string Server::ERR_INVITEONLYCHAN(User &user, std::string const &channel)
 {
 	std::string	str = channel + " ";
 	std::string	msg = "Channot join channel (+i)";
-	return (_numeric(user, "",  msg, "473"));
+	return (_numeric(user, str,  msg, "473"));
 }
 
 std::string Server::ERR_BADCHANNELKEY(User &user, std::string const &channel)
 {
 	std::string	str = channel + " ";
 	std::string	msg = "Cannot join channel (+k)";
-	return (_numeric(user, "",  msg, "475"));
+	return (_numeric(user, str,  msg, "475"));
 }
 
 std::string Server::ERR_BADCHANMASK(User &user)
@@ -298,7 +296,19 @@ std::string Server::ERR_CHANOPRIVSNEEDED(User &user, std::string const &channel)
 {
 	std::string	str = channel + " ";
 	std::string	msg = "You're not channel operator";
-	return (_numeric(user, "",  msg, "482"));
+	return (_numeric(user, str,  msg, "482"));
+}
+
+std::string Server::ERR_UMODEUNKNOWNFLAG(User &user)
+{
+	std::string	msg = "Unkown MODE flag";
+	return (_numeric(user, "",  msg, "501"));
+}
+
+std::string Server::ERR_USERDONTMATCH(User &user)
+{
+	std::string	msg = "Can't change mode for other users";
+	return (_numeric(user, "",  msg, "502"));
 }
 
 std::string Server::ERROR(std::string reason)
@@ -337,7 +347,13 @@ std::string	Server::PART(User &user, std::string const &channel, std::string con
 	return (msg);
 }
 
-std::string	Server::_numeric(User &user, std::string str1, std::string &str2, std::string numeric)
+std::string	Server::MODE(User &user, std::string const &target, std::string const &set)
+{
+	std::string	msg = std::string(":") + user.getNickname() + "!" + user.getUsername() + "@localhost MODE " + target + " " + set + "\r\n";
+	return (msg);
+}
+
+std::string	Server::_numeric(User &user, std::string const &str1, std::string const &str2, std::string numeric)
 {
 	std::string	msg;
 
