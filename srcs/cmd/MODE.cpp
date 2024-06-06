@@ -16,6 +16,9 @@ std::string	getModeString(User &user, std::map<char, bool> const &set)
 
 	for (; it != ite; it++)
 	{
+		if (user.getMode(it->first) == it->second) {
+			continue ;
+		}
 		user.setMode(it->first, it->second);
 		if (it->second == false)
 		{
