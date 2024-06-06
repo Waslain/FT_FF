@@ -6,7 +6,7 @@
 /*   By: fduzant <fduzant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 14:32:13 by fduzant           #+#    #+#             */
-/*   Updated: 2024/06/06 17:37:55 by fduzant          ###   ########.fr       */
+/*   Updated: 2024/06/06 19:16:09 by fduzant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,14 @@ void	Server::_KICK(int const &fd, std::string &args)
 				// found
 				if (DEBUG)
 					std::cout << "[DEBUG] User is in channel" << std::endl;
-				_addChannelMessage(user, chan, KICK(user, channel, target, comment), ALL);
-				chan.removeUser(targetUser);
-				targetUser.leaveChannel(chan);
+				if (user.isOperator(channel))
+				{
+					_addChannelMessage(user, chan, KICK(user, channel, target, comment), ALL);
+					chan.removeUser(targetUser);
+					targetUser.leaveChannel(chan);
+				}
+				else
+					_addClientMessage(user, ERR_CHANOPRIVSNEEDED(user, channel));
 			}
 		}catch (std::exception &e) {
 			if (DEBUG)
