@@ -54,6 +54,7 @@ SRCS		=	main.cpp			\
 				PRIVMSG.cpp			\
 				NAMES.cpp			\
 				TOPIC.cpp			\
+				MODE.cpp			\
 				)
 INCL		:= $(addprefix $(INCL_PATH), $(INCL))
 SRCS		:= $(addprefix $(SRCS_PATH), $(SRCS))
