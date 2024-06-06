@@ -6,7 +6,7 @@
 /*   By: fduzant <fduzant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 19:26:42 by fduzant           #+#    #+#             */
-/*   Updated: 2024/06/03 18:32:13 by fduzant          ###   ########.fr       */
+/*   Updated: 2024/06/06 16:44:09 by fduzant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ class Server
 		void		_NAMES(int const &fd, std::string &args);
 		void		_TOPIC(int const &fd, std::string &args);
 		void		_MODE(int const &fd, std::string &args);
+		void		_KICK(int const &fd, std::string &args);
 
 		//UTILS
 		bool		nick_already_in_use(std::string nick);
@@ -196,6 +197,7 @@ class Server
 		std::string	PONG(std::string &token);
 		std::string	JOIN(User &user, std::string const &channel);
 		std::string	PART(User &user, std::string const &channel, std::string const &reason);
+    std::string	KICK(User &user, std::string const &channel, std::string const &target, std::string const &comment);
 		std::string	PRIVMSG(User &user, std::string const &, std::string const &msg);
 		std::string	MODE(User &user, std::string const &, std::string const &);
 		std::string	_numeric(User &, std::string const &, std::string const &, std::string);

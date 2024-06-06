@@ -6,7 +6,7 @@
 /*   By: fduzant <fduzant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 19:26:47 by fduzant           #+#    #+#             */
-/*   Updated: 2024/06/03 18:41:15 by fduzant          ###   ########.fr       */
+/*   Updated: 2024/06/06 14:31:17 by fduzant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void Server::_initCmdMap()
 	//_cmdmap["OPER"] = &Server::_OPER;
 	//_cmdmap["LIST"] = &Server::_LIST;
 	//_cmdmap["INVITE"] = &Server::_INVITE;
-	//_cmdmap["KICK"] = &Server::_KICK;
+	_cmdmap["KICK"] = &Server::_KICK;
 	//_cmdmap["ADMIN"] = &Server::_ADMIN;
 	//_cmdmap["TIME"] = &Server::_TIME;
 	//_cmdmap["STATS"] = &Server::_STATS;
