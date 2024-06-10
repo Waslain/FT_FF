@@ -6,7 +6,7 @@
 /*   By: fduzant <fduzant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 19:26:42 by fduzant           #+#    #+#             */
-/*   Updated: 2024/06/06 16:44:09 by fduzant          ###   ########.fr       */
+/*   Updated: 2024/06/10 19:18:16 by fduzant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ class Server
 		void		_TOPIC(int const &fd, std::string &args);
 		void		_MODE(int const &fd, std::string &args);
 		void		_KICK(int const &fd, std::string &args);
+		void		_INVITE(int const &fd, std::string &args);
 
 		//UTILS
 		bool		nick_already_in_use(std::string nick);
@@ -162,6 +163,7 @@ class Server
 		std::string RPL_NOTOPIC(User &user, Channel &channel);
 		std::string RPL_TOPIC(User &user, Channel &channel);
 		std::string RPL_TOPICWHOTIME(User &user, Channel &channel);
+		std::string RPL_INVITING(User &user, std::string const &nick, std::string const &channel);
 		std::string RPL_VERSION(User &user);
 		std::string RPL_NAMEREPLY(User &user, std::string const &);
 		std::string RPL_ENDOFNAMES(User &user, std::string const &channame);
@@ -197,7 +199,7 @@ class Server
 		std::string	PONG(std::string &token);
 		std::string	JOIN(User &user, std::string const &channel);
 		std::string	PART(User &user, std::string const &channel, std::string const &reason);
-    std::string	KICK(User &user, std::string const &channel, std::string const &target, std::string const &comment);
+    	std::string	KICK(User &user, std::string const &channel, std::string const &target, std::string const &comment);
 		std::string	PRIVMSG(User &user, std::string const &, std::string const &msg);
 		std::string	MODE(User &user, std::string const &, std::string const &);
 		std::string	_numeric(User &, std::string const &, std::string const &, std::string);

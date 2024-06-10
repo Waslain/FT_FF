@@ -113,6 +113,12 @@ std::string Server::RPL_TOPICWHOTIME(User &user, Channel &channel)
 	return (_numeric(user, str, msg, "333"));
 }
 
+std::string Server::RPL_INVITING(User &user, std::string const &nick, std::string const &channel)
+{
+	std::string	str = nick + " " + channel + " ";
+	return (_numeric(user, str, "", "341"));
+}
+
 std::string Server::RPL_VERSION(User &user)
 {
 	std::string	str = VERSION + " " + HOSTNAME + " ";
