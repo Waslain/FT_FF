@@ -247,6 +247,13 @@ std::string Server::ERR_NOTONCHANNEL(User &user, std::string const &channel)
 	return (_numeric(user, "", msg, "442"));
 }
 
+std::string Server::ERR_USERONCHANNEL(User &user, std::string const &channel)
+{
+	std::string str = channel + " ";
+	std::string	msg = "is already on channel";
+	return (_numeric(user, "", msg, "443"));
+}
+
 std::string Server::ERR_NOTREGISTERED(User &user)
 {
 	std::string	msg = "You have not registered";

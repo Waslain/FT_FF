@@ -6,7 +6,7 @@
 /*   By: fduzant <fduzant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 19:26:42 by fduzant           #+#    #+#             */
-/*   Updated: 2024/06/10 19:18:16 by fduzant          ###   ########.fr       */
+/*   Updated: 2024/06/12 11:37:13 by fduzant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,6 +184,7 @@ class Server
 		std::string ERR_ERRONEUSNICKNAME(User &user);
 		std::string ERR_NICKNAMEINUSE(User &user);
 		std::string ERR_NOTONCHANNEL(User &user, std::string const &channel);
+		std::string ERR_USERONCHANNEL(User &user, std::string const &channel);
 		std::string ERR_NOTREGISTERED(User &user);
 		std::string ERR_NEEDMOREPARAMS(User &user, std::string command);
 		std::string ERR_ALREADYREGISTERED(User &user);

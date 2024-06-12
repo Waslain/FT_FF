@@ -6,7 +6,7 @@
 /*   By: fduzant <fduzant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 18:29:15 by fduzant           #+#    #+#             */
-/*   Updated: 2024/06/10 20:48:01 by fduzant          ###   ########.fr       */
+/*   Updated: 2024/06/12 11:52:33 by fduzant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,19 +73,19 @@ void	Server::_INVITE(int const &fd, std::string &args)
 				if (chan.getMode('i') == true)
 				{
 					if (user.isOperator(channel))
-						if (chan.getUsers(targetUser).find(targetUser.getNickname()) != std::string::npos)
+						if (chan.getUsers(targetUser).find(targetUser.getNickname()) == std::string::npos)
 							_addChannelMessage(targetUser, chan, RPL_INVITING(targetUser, target, channel), OTHER);
 						else
-							_addClientMessage(user, ERR_USERONCHANNEL(user, target, channel));
+							_addClientMessage(user, ERR_USERONCHANNEL(user, channel));
 					else
 						_addClientMessage(user, ERR_CHANOPRIVSNEEDED(user, channel));
 				}
 				else
 				{
-					if (chan.getUsers(targetUser).find(targetUser.getNickname()) != std::string::npos)
+					if (chan.getUsers(targetUser).find(targetUser.getNickname()) == std::string::npos)
 						_addChannelMessage(targetUser, chan, RPL_INVITING(targetUser, target, channel), OTHER);
 					else
-						_addClientMessage(user, ERR_USERONCHANNEL(user, target, channel));
+						_addClientMessage(user, ERR_USERONCHANNEL(user, channel));
 				}
 			}
 		}catch (std::exception &e) {
