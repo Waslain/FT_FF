@@ -48,8 +48,11 @@ void		Server::_joinChannel(User &user, std::string &channel, std::string &key)
 		}
 		if (_channels[channel].getMode('i'))
 		{
-			_addClientMessage(user, ERR_INVITEONLYCHAN(user, channel));
-			return ;
+			if (_channels[channel].IsUserInInviteList(user) == false)
+			{
+				_addClientMessage(user, ERR_INVITEONLYCHAN(user, channel));
+				return ;
+			}
 		}
 		if (_channels[channel].getNbUsers() == _channels[channel].getUserLimit())
 		{

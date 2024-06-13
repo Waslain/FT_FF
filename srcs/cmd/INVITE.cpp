@@ -6,7 +6,7 @@
 /*   By: fduzant <fduzant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 18:29:15 by fduzant           #+#    #+#             */
-/*   Updated: 2024/06/12 11:52:33 by fduzant          ###   ########.fr       */
+/*   Updated: 2024/06/13 15:44:34 by fduzant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,10 @@ void	Server::_INVITE(int const &fd, std::string &args)
 				{
 					if (user.isOperator(channel))
 						if (chan.getUsers(targetUser).find(targetUser.getNickname()) == std::string::npos)
+						{
 							_addChannelMessage(targetUser, chan, RPL_INVITING(targetUser, target, channel), OTHER);
+							chan.addUserInInviteList(targetUser);
+						}
 						else
 							_addClientMessage(user, ERR_USERONCHANNEL(user, channel));
 					else
@@ -83,7 +86,10 @@ void	Server::_INVITE(int const &fd, std::string &args)
 				else
 				{
 					if (chan.getUsers(targetUser).find(targetUser.getNickname()) == std::string::npos)
+					{
 						_addChannelMessage(targetUser, chan, RPL_INVITING(targetUser, target, channel), OTHER);
+						chan.addUserInInviteList(targetUser);
+					}
 					else
 						_addClientMessage(user, ERR_USERONCHANNEL(user, channel));
 				}
