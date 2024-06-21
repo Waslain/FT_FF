@@ -102,14 +102,18 @@ std::string Server::RPL_CHANNELMODEIS(User &user, std::string const &channame)
 			str += modes[i];
 		}
 	}
+	std::string	params;
 	std::string	key = channel.getKey();
 	if (key.empty() == false) {
-		str += std::string(" ") + key;
+		str += 'k';
+		params += std::string(" ") + key;
 	}
 	int	l = channel.getUserLimit();
 	if (l != -1) {
-		str += std::string(" ") + itos(l);
+		str += 'l';
+		params += std::string(" ") + itos(l);
 	}
+	str += params;
 	return (_numeric(user, str, "", "324"));
 }
 
