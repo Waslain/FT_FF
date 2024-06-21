@@ -148,6 +148,9 @@ class Server
 		void		_channelModes(User &user, std::string const &target, std::string &args);
 		std::string	_getModeString(User &, std::map<char, bool> const &);
 		std::string	_getModeString(User &, Channel &, std::map<char, bool> const &, std::string &);
+		int			_setChannelKey(Channel &, std::string &, std::string &, bool const &);
+		int			_setOperator(Channel &, std::string &, User &, std::string &, bool const &);
+		int			_setUserLimit(Channel &, std::string &, std::string &, bool const &);
 		std::map<char, bool>	_parseModeString(std::string &, bool &, std::string const &);
 		User 		*_getUser(const std::string &nick);
 

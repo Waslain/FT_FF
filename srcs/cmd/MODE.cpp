@@ -29,6 +29,86 @@ std::string	Server::_getModeString(User &user, std::map<char, bool> const &set)
 	return (setFalse + setTrue);
 }
 
+int	Server::_setChannelKey(Channel &channel, std::string &params, std::string &args, bool const &value)
+{
+	if (value == false)
+	{
+		if (channel.getKey().empty()) {
+			return (1);
+		}
+		channel.setKey(std::string());
+	}
+	else
+	{
+		std::string	key = getFirstWord(args);
+		if (key.empty()) {
+			return (1);
+		}
+		channel.setKey(key);
+		params += std::string(" ") + key;
+	}
+	return (0);
+}
+
+int	Server::_setOperator(Channel &channel, std::string &params, User &user, std::string &args, bool const &value)
+{
+	std::string	nick = getFirstWord(args);
+	if (nick.empty()) {
+		return (1);
+	}
+	User	*target = _getUser(nick);
+	if (target == NULL) {
+		return (1);
+	}
+	if (value == false)
+	{
+		if (channel.isOperator(*target) == false) {
+			return (1);
+		}
+		channel.removeOperator(*target);
+		params += std::string(" ") + nick;
+	}
+	else {
+		if (channel.isOperator(*target) == true) {
+			return (1);
+		}
+		if (target->isOnChannel(channel.getName()) == false)
+		{
+			_addClientMessage(user, ERR_USERNOTINCHANNEL(user, nick, channel.getName()));
+			return (1);
+		}
+		channel.addOperator(*target);
+		params += std::string(" ") + nick;
+	}
+	return (0);
+}
+
+int	Server::_setUserLimit(Channel &channel, std::string &params, std::string &args, bool const &value)
+{
+	if (value == false) {
+		if (channel.getUserLimit() == -1) {
+			return (1);
+		} channel.setUserLimit(-1);
+	}
+	else
+	{
+		std::string	limit = getFirstWord(args);
+		if (limit.empty()) {
+			return (1);
+		}
+		std::stringstream	ss;
+		int					n;
+		ss << limit;
+		ss >> n;
+		if (n == channel.getUserLimit()) {
+			return (-1);
+		}
+		channel.setUserLimit(n);
+		params += std::string(" ") + itos(n);
+	}
+	return (0);
+}
+
 std::string	Server::_getModeString(User &user, Channel &channel, std::map<char, bool> const &set, std::string &args)
 {
 	std::map<char, bool>::const_iterator	it = set.begin();
@@ -50,77 +130,20 @@ std::string	Server::_getModeString(User &user, Channel &channel, std::map<char, 
 				channel.setMode(c, it->second);
 				break ;
 			case 'k':
-			{
-				if (it->second == false)
-				{
-					if (channel.getKey().empty()) {
-						continue ;
-					}
-					channel.setKey(std::string());
+				if (_setChannelKey(channel, params, args, it->second)) {
+					continue ;
 				}
-				else {
-					std::string	key = getFirstWord(args);
-					if (args.empty()) {
-						continue ;
-					}
-					channel.setKey(key);
-					params += std::string(" ") + key;
-				}
-			}
 				break ;
 			case 'o':
-			{
-				std::string	nick = getFirstWord(args);
-				if (nick.empty()) {
+				if (_setOperator(channel, params, user, args, it->second)) {
 					continue ;
 				}
-				User	*target = _getUser(nick);
-				if (target == NULL) {
-					continue ;
-				}
-				if (it->second == false)
-				{
-					if (channel.isOperator(*target) == false) {
-						continue ;
-					}
-					channel.removeOperator(*target);
-					params += std::string(" ") + nick;
-				}
-				else {
-					if (channel.isOperator(*target) == true) {
-						continue ;
-					}
-					if (target->isOnChannel(channel.getName()) == false)
-					{
-						_addClientMessage(user, ERR_USERNOTINCHANNEL(user, nick, channel.getName()));
-						continue ;
-					}
-					channel.addOperator(*target);
-					params += std::string(" ") + nick;
-				}
-			}
 				break ;
-				/*
 			case 'l':
-			{
-				if (it->second == false) {
-					if (channel.getUserLimit() == -1) {
-						continue ;
-					}
-					channel.setUserLimit(-1);
+				if (_setUserLimit(channel, params, args, it->second)) {
+					continue ;
 				}
-				else
-				{
-					std::string	limit = getFirstWord(args);
-					if (limit.empty()) {
-						continue ;
-					}
-					int	n = // convert limit to int
-					channel.setUserLimit(n)
-				}
-			}
 				break ;
-				*/
 		}
 		if (it->second == true) {
 			setTrue += c;
@@ -205,7 +228,7 @@ void	Server::_channelModes(User &user, std::string const &target, std::string &a
 	bool					unknown = false;
 	std::map<char, bool>	set = _parseModeString(args, unknown, "itkol");
 
-	_addChannelMessage(user, it->second, MODE(user, target, _getModeString(user, set)), ALL);
+	_addChannelMessage(user, it->second, MODE(user, target, _getModeString(user, _channels[target], set, args)), ALL);
 	if (unknown) {
 		_addClientMessage(user, ERR_UMODEUNKNOWNFLAG(user));
 	}
