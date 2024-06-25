@@ -3,7 +3,7 @@
 Channel::Channel()
 {}
 
-Channel::Channel(User &user, std::string const &name): _name(name), _nbUsers(0), _userLimit(-1)
+Channel::Channel(User &user, std::string const &name): _name(name), _creationTime(time(NULL)), _nbUsers(0), _userLimit(-1)
 {
 	std::string	mode = CHANMODES;
 	size_t		size = mode.size();
@@ -30,6 +30,8 @@ Channel	&Channel::operator=(Channel const &cpy)
 {
 	_name = cpy._name;
 	_topic = cpy._topic;
+	_topicTime = cpy._topicTime;
+	_creationTime = cpy._creationTime;
 	_key = cpy._key;
 	_modes = cpy._modes;
 	_users = cpy._users;
@@ -108,6 +110,11 @@ int				Channel::getUserLimit() const
 time_t			Channel::getTopicTime() const
 {
 	return (_topicTime);
+}
+
+time_t			Channel::getCreationTime() const
+{
+	return (_creationTime);
 }
 
 std::string		Channel::getUsers(User const &user) const

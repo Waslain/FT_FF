@@ -50,7 +50,6 @@
 
 #define AWAYLEN 350
 #define CHANLIMIT 5
-#define	CHANMODES std::string("it")
 #define CHANNELLEN 50
 #define HOSTLEN 50
 #define KICKLEN 350
@@ -58,6 +57,7 @@
 #define TOPICLEN 350
 #define USERLEN 20
 #define	USERMODES std::string("i")
+#define	CHANMODES std::string("it")
 
 #define	ALPHA std::string("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 #define NUM std::string("0123456789")
@@ -78,15 +78,17 @@ class Server
 
 		User &getUserByNick(const std::string &nick);
 		Channel &getChannel(const std::string &chan);
+	
 	private:
 	
 		Server();
 		Server(const Server &copy);
 		Server &operator=(const Server &src);
 
-		typedef std::map<int, User>::iterator				userIt;
-		typedef std::map<int, User>::const_iterator			userConstIt;
-		typedef std::map<std::string, Channel>::iterator	chanIt;
+		typedef std::map<int, User>::iterator					userIt;
+		typedef std::map<int, User>::const_iterator				userConstIt;
+		typedef std::map<std::string, Channel>::iterator		chanIt;
+		typedef std::map<std::string, Channel>::const_iterator	chanConstIt;
 
 		std::string				 		_pass;
 		std::string						_host;
@@ -145,62 +147,71 @@ class Server
 		bool		_isNickOnServer(std::string const &nick) const;
 		void		_userModes(User &user, std::string const &target, std::string &args);
 		void		_channelModes(User &user, std::string const &target, std::string &args);
+		std::string	_getModeString(User &, std::map<char, bool> const &);
+		std::string	_getModeString(User &, Channel &, std::map<char, bool> const &, std::string &);
+		int			_setChannelKey(Channel &, std::string &, std::string &, bool const &);
+		int			_setOperator(Channel &, std::string &, User &, std::string &, bool const &);
+		int			_setUserLimit(Channel &, std::string &, std::string &, bool const &);
+		std::map<char, bool>	_parseModeString(std::string &, bool &, std::string const &);
+		User 		*_getUser(const std::string &nick);
 
 		// messages
-		std::string	RPL_WELCOME(User &user);
-		std::string	RPL_YOURHOST(User &user);
-		std::string	RPL_CREATED(User &user);
-		std::string	RPL_MYINFO(User &user);
-		std::string	RPL_ISUPPORT(User &user);
-		std::string	RPL_UMODEIS(User &user);
-		std::string	RPL_LUSERCLIENT(User &user);
-		std::string	RPL_LUSEROP(User &user);
-		std::string	RPL_LUSERUNKNOWN(User &user);
-		std::string	RPL_LUSERCHANNELS(User &user);
-		std::string	RPL_LUSERME(User &user);
-		std::string	RPL_LOCALUSERS(User &user);
-		std::string	RPL_GLOBALUSERS(User &user);
-		std::string RPL_NOTOPIC(User &user, Channel &channel);
-		std::string RPL_TOPIC(User &user, Channel &channel);
-		std::string RPL_TOPICWHOTIME(User &user, Channel &channel);
-		std::string RPL_INVITING(User &user, std::string const &nick, std::string const &channel);
-		std::string RPL_VERSION(User &user);
-		std::string RPL_NAMEREPLY(User &user, std::string const &);
-		std::string RPL_ENDOFNAMES(User &user, std::string const &channame);
-		std::string RPL_MOTD(User &user, std::string msg);
-		std::string RPL_MOTDSTART(User &user);
-		std::string RPL_ENDOFMOTD(User &user);
-		std::string ERR_NOSUCHNICK(User &user, std::string const &nick);
-		std::string ERR_NOSUCHSERVER(User &user, std::string const &);
-		std::string ERR_NOSUCHCHANNEL(User &user, std::string const &);
-		std::string ERR_CANNOTSENDTOCHAN(User &user, std::string const &channel);
-		std::string ERR_TOOMANYCHANNELS(User &user, std::string const &channel);
-		std::string ERR_NORECIPIENT(User &user, std::string const &command);
-		std::string ERR_NOTEXTTOSEND(User &user);
-		std::string ERR_INPUTTOOLONG(User &user);
-		std::string ERR_UNKNOWNCOMMAND(User &user, std::string const &);
-		std::string ERR_NOMOTD(User &user);
-		std::string ERR_NONICKNAMEGIVEN(User &user);
-		std::string ERR_ERRONEUSNICKNAME(User &user);
-		std::string ERR_NICKNAMEINUSE(User &user);
-		std::string ERR_NOTONCHANNEL(User &user, std::string const &channel);
-		std::string ERR_USERONCHANNEL(User &user, std::string const &channel);
-		std::string ERR_NOTREGISTERED(User &user);
-		std::string ERR_NEEDMOREPARAMS(User &user, std::string command);
-		std::string ERR_ALREADYREGISTERED(User &user);
-		std::string ERR_PASSWDMISMATCH(User &user);
-		std::string ERR_CHANNELISFULL(User &user, std::string const &channel);
-		std::string ERR_INVITEONLYCHAN(User &user, std::string const &channel);
-		std::string ERR_BADCHANNELKEY(User &user, std::string const &channel);
-		std::string ERR_BADCHANMASK(User &user);
-		std::string ERR_CHANOPRIVSNEEDED(User &user, std::string const &channel);
-		std::string ERR_UMODEUNKNOWNFLAG(User &user);
-		std::string ERR_USERDONTMATCH(User &user);
+		std::string	RPL_WELCOME(User &);
+		std::string	RPL_YOURHOST(User &);
+		std::string	RPL_CREATED(User &);
+		std::string	RPL_MYINFO(User &);
+		std::string	RPL_ISUPPORT(User &);
+		std::string	RPL_UMODEIS(User &);
+		std::string	RPL_LUSERCLIENT(User &);
+		std::string	RPL_LUSEROP(User &);
+		std::string	RPL_LUSERUNKNOWN(User &);
+		std::string	RPL_LUSERCHANNELS(User &);
+		std::string	RPL_LUSERME(User &);
+		std::string	RPL_LOCALUSERS(User &);
+		std::string	RPL_GLOBALUSERS(User &);
+		std::string RPL_CHANNELMODEIS(User &, std::string const &);
+		std::string RPL_NOTOPIC(User &, Channel &);
+		std::string RPL_TOPIC(User &, Channel &);
+		std::string RPL_TOPICWHOTIME(User &, Channel &);
+    std::string RPL_INVITING(User &user, std::string const &nick, std::string const &channel);
+		std::string RPL_VERSION(User &);
+		std::string RPL_NAMEREPLY(User &, std::string const &);
+		std::string RPL_ENDOFNAMES(User &, std::string const &);
+		std::string RPL_MOTD(User &, std::string);
+		std::string RPL_MOTDSTART(User &);
+		std::string RPL_ENDOFMOTD(User &);
+		std::string ERR_NOSUCHNICK(User &, std::string const &);
+		std::string ERR_NOSUCHSERVER(User &, std::string const &);
+		std::string ERR_NOSUCHCHANNEL(User &, std::string const &);
+		std::string ERR_CANNOTSENDTOCHAN(User &, std::string const &);
+		std::string ERR_TOOMANYCHANNELS(User &, std::string const &);
+		std::string ERR_NORECIPIENT(User &, std::string const &);
+		std::string ERR_NOTEXTTOSEND(User &);
+		std::string ERR_INPUTTOOLONG(User &);
+		std::string ERR_UNKNOWNCOMMAND(User &, std::string const &);
+		std::string ERR_NOMOTD(User &);
+		std::string ERR_NONICKNAMEGIVEN(User &);
+		std::string ERR_ERRONEUSNICKNAME(User &);
+		std::string ERR_NICKNAMEINUSE(User &);
+		std::string ERR_USERNOTINCHANNEL(User &, std::string const &, std::string const &);
+		std::string ERR_NOTONCHANNEL(User &, std::string const &);
+    std::string ERR_USERONCHANNEL(User &user, std::string const &channel);
+		std::string ERR_NOTREGISTERED(User &);
+		std::string ERR_NEEDMOREPARAMS(User &, std::string);
+		std::string ERR_ALREADYREGISTERED(User &);
+		std::string ERR_PASSWDMISMATCH(User &);
+		std::string ERR_CHANNELISFULL(User &, std::string const &);
+		std::string ERR_INVITEONLYCHAN(User &, std::string const &);
+		std::string ERR_BADCHANNELKEY(User &, std::string const &);
+		std::string ERR_BADCHANMASK(User &);
+		std::string ERR_CHANOPRIVSNEEDED(User &, std::string const &);
+		std::string ERR_UMODEUNKNOWNFLAG(User &);
+		std::string ERR_USERDONTMATCH(User &);
 		std::string ERROR(std::string msg);
 		std::string	PONG(std::string &token);
 		std::string	JOIN(User &user, std::string const &channel);
 		std::string	PART(User &user, std::string const &channel, std::string const &reason);
-    	std::string	KICK(User &user, std::string const &channel, std::string const &target, std::string const &comment);
+    std::string	KICK(User &user, std::string const &channel, std::string const &target, std::string const &comment);
 		std::string	PRIVMSG(User &user, std::string const &, std::string const &msg);
 		std::string	MODE(User &user, std::string const &, std::string const &);
 		std::string	_numeric(User &, std::string const &, std::string const &, std::string);

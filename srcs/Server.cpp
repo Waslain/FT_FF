@@ -108,6 +108,20 @@ User &Server::getUserByNick(const std::string &nick)
 	throw std::runtime_error("getUserByNick: user not found");
 }
 
+User *Server::_getUser(const std::string &nick)
+{
+	userIt	it = _users.begin();
+	userIt	ite = _users.end();
+
+	for (; it != ite; it++)
+	{
+		if (it->second.getNickname() == nick) {
+			return (&(it->second));
+		}
+	}
+	return (NULL);
+}
+
 bool	Server::_isNickOnServer(std::string const &nick) const
 {
 	userConstIt	it = _users.begin();

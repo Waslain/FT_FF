@@ -92,6 +92,31 @@ std::string	Server::RPL_GLOBALUSERS(User &user)
 	return (_numeric(user, str, msg, "266"));
 }
 
+std::string Server::RPL_CHANNELMODEIS(User &user, std::string const &channame)
+{
+	Channel	&channel = _channels[channame];
+	std::string	str = channame + " ";
+	std::string	modes = CHANMODES;
+	for (size_t i = 0; i < modes.size(); i++) {
+		if (channel.getMode(modes[i])) {
+			str += modes[i];
+		}
+	}
+	std::string	params;
+	std::string	key = channel.getKey();
+	if (key.empty() == false) {
+		str += 'k';
+		params += std::string(" ") + key;
+	}
+	int	l = channel.getUserLimit();
+	if (l != -1) {
+		str += 'l';
+		params += std::string(" ") + itos(l);
+	}
+	str += params;
+	return (_numeric(user, str, "", "324"));
+}
+
 std::string Server::RPL_NOTOPIC(User &user, Channel &channel)
 {
 	std::string	str = channel.getName() + " ";
@@ -238,6 +263,13 @@ std::string Server::ERR_NICKNAMEINUSE(User &user)
 {
 	std::string	msg = "Nickname is already in use";
 	return (_numeric(user, "", msg, "433"));
+}
+
+std::string Server::ERR_USERNOTINCHANNEL(User &user, std::string const &nick, std::string const &channel)
+{
+	std::string str = nick + " " + channel + " ";
+	std::string	msg = "They're not on that channel";
+	return (_numeric(user, "", msg, "442"));
 }
 
 std::string Server::ERR_NOTONCHANNEL(User &user, std::string const &channel)

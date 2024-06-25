@@ -27,6 +27,7 @@ class	Channel
 		int						getNbUsers() const;
 		int						getUserLimit() const;
 		time_t					getTopicTime() const;
+		time_t					getCreationTime() const;
 		std::string				getUsers(User const &user) const;
 		bool					IsUserInInviteList(User const &user) const;
 		bool					isOperator(User const &user) const;
@@ -44,6 +45,7 @@ class	Channel
 		std::string				_topic;
 		std::string				_topicWho;
 		time_t					_topicTime;
+		time_t					_creationTime;
 		std::string				_key;
 		int						_nbUsers;
 		int						_userLimit;
