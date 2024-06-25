@@ -138,6 +138,12 @@ std::string Server::RPL_TOPICWHOTIME(User &user, Channel &channel)
 	return (_numeric(user, str, msg, "333"));
 }
 
+std::string Server::RPL_INVITING(User &user, std::string const &nick, std::string const &channel)
+{
+	std::string	str = nick + " " + channel + " ";
+	return (_numeric(user, str, "", "341"));
+}
+
 std::string Server::RPL_VERSION(User &user)
 {
 	std::string	str = VERSION + " " + HOSTNAME + " ";
@@ -271,6 +277,13 @@ std::string Server::ERR_NOTONCHANNEL(User &user, std::string const &channel)
 	std::string str = channel + " ";
 	std::string	msg = "You're not on that channel";
 	return (_numeric(user, "", msg, "442"));
+}
+
+std::string Server::ERR_USERONCHANNEL(User &user, std::string const &channel)
+{
+	std::string str = channel + " ";
+	std::string	msg = "is already on channel";
+	return (_numeric(user, "", msg, "443"));
 }
 
 std::string Server::ERR_NOTREGISTERED(User &user)

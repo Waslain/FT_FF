@@ -29,9 +29,12 @@ class	Channel
 		time_t					getTopicTime() const;
 		time_t					getCreationTime() const;
 		std::string				getUsers(User const &user) const;
+		bool					IsUserInInviteList(User const &user) const;
 		bool					isOperator(User const &user) const;
 
 		void					addUser(User &);
+		void					addUserInInviteList(User &user);
+		void					removeUserInInviteList(User &);
 		void					removeUser(User &);
 		void					addOperator(User &);
 		void					removeOperator(User &);
@@ -48,6 +51,7 @@ class	Channel
 		int						_userLimit;
 		std::map<char, bool>	_modes;
 		std::vector<User *>		_users;
+		std::vector<User *>		_invitelist;
 		std::vector<User *>		_operators;
 
 		typedef std::vector<User *>::iterator		userIt;

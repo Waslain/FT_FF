@@ -6,7 +6,7 @@
 /*   By: fduzant <fduzant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 19:26:42 by fduzant           #+#    #+#             */
-/*   Updated: 2024/06/06 16:44:09 by fduzant          ###   ########.fr       */
+/*   Updated: 2024/06/12 11:37:13 by fduzant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ class Server
 		void		_TOPIC(int const &fd, std::string &args);
 		void		_MODE(int const &fd, std::string &args);
 		void		_KICK(int const &fd, std::string &args);
+		void		_INVITE(int const &fd, std::string &args);
 
 		//UTILS
 		bool		nick_already_in_use(std::string nick);
@@ -172,6 +173,7 @@ class Server
 		std::string RPL_NOTOPIC(User &, Channel &);
 		std::string RPL_TOPIC(User &, Channel &);
 		std::string RPL_TOPICWHOTIME(User &, Channel &);
+    std::string RPL_INVITING(User &user, std::string const &nick, std::string const &channel);
 		std::string RPL_VERSION(User &);
 		std::string RPL_NAMEREPLY(User &, std::string const &);
 		std::string RPL_ENDOFNAMES(User &, std::string const &);
@@ -193,6 +195,7 @@ class Server
 		std::string ERR_NICKNAMEINUSE(User &);
 		std::string ERR_USERNOTINCHANNEL(User &, std::string const &, std::string const &);
 		std::string ERR_NOTONCHANNEL(User &, std::string const &);
+    std::string ERR_USERONCHANNEL(User &user, std::string const &channel);
 		std::string ERR_NOTREGISTERED(User &);
 		std::string ERR_NEEDMOREPARAMS(User &, std::string);
 		std::string ERR_ALREADYREGISTERED(User &);

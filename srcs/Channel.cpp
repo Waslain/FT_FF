@@ -137,6 +137,17 @@ std::string		Channel::getUsers(User const &user) const
 	return (str);
 }
 
+bool		Channel::IsUserInInviteList(User const &user) const
+{
+	userConstIt	it = _invitelist.begin();
+	userConstIt	ite = _invitelist.end();
+
+	if (find(it, ite, &user) == ite) {
+		return (false);
+	}
+	return (true);
+}
+
 bool			Channel::isOperator(User const &user) const
 {
 	userConstIt	it = _operators.begin();
@@ -154,18 +165,43 @@ void			Channel::addUser(User &user)
 	_nbUsers++;
 }
 
+void			Channel::addUserInInviteList(User &user)
+{
+	_invitelist.push_back(&user);
+}
+
+void			Channel::removeUserInInviteList(User &user)
+{
+	userIt it = _invitelist.begin();
+	userIt ite = _invitelist.end();
+	it = find(it, ite, &user);
+	*it = NULL;
+	_invitelist.erase(it);
+}
+
 void			Channel::removeUser(User &user)
 {
 	userIt	it = _users.begin();
 	userIt	ite = _users.end();
 	userIt	itt = find(it, ite, &user);
 	
+	// Remove user from invite list
+	userIt it2 = _invitelist.begin();
+	userIt ite2 = _invitelist.end();
+	it2 = find(it2, ite2, &user);
+	if (it2 != ite2) {
+		*it2 = NULL;
+		_invitelist.erase(it2);
+	}
+	// Remove user from invite list
+
 	*itt = NULL;
 	_users.erase(itt);
 	_nbUsers--;
 	if (isOperator(user)) {
 		removeOperator(user);
 	}
+
 }
 
 void			Channel::addOperator(User &user)
