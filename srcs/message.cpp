@@ -398,6 +398,12 @@ std::string	Server::MODE(User &user, std::string const &target, std::string cons
 	return (msg);
 }
 
+std::string	Server::QUIT(User &user, std::string const &reason)
+{
+	std::string	msg = std::string(":") + user.getNickname() + "!" + user.getUsername() + "@localhost QUIT :" + reason + "\r\n";
+	return (msg);
+}
+
 std::string	Server::_numeric(User &user, std::string const &str1, std::string const &str2, std::string numeric)
 {
 	std::string	msg;
