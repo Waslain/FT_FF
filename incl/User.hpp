@@ -18,6 +18,7 @@ class	User
 		void								setUsername(std::string const &);
 		void								setRealname(std::string const &);
 		void								setPassword(std::string const &);
+		void								setReason(std::string const &);
 		void								setRecvBuf(std::string const &);
 		void								setSendBuf(std::string const &);
 		void								setRegistration(bool const &);
@@ -31,6 +32,7 @@ class	User
 		std::string							getUsername() const;
 		std::string							getRealname() const;
 		std::string							getPassword() const;
+		std::string							getReason() const;
 		std::string							getRecvBuf() const;
 		std::string							getSendBuf() const;
 		time_t								getTime() const;
@@ -44,6 +46,7 @@ class	User
 		void								joinChannel(Channel &);
 		void								leaveChannel(Channel &);
 		void								clearChannels(std::string const &);
+		void								quitChannels(std::string const &, std::string const &);
 
 	private:
 		int									_fd;
@@ -52,6 +55,7 @@ class	User
 		std::string							_username;
 		std::string							_realname;
 		std::string							_password;
+		std::string							_reason;
 		std::string							_sendBuf;
 		std::string 						_recvBuf;
 		time_t 								_time;

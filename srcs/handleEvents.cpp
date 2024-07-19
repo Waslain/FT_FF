@@ -109,7 +109,7 @@ void	Server::_deleteClient(size_t const &i)
 		_nbUConnections--;
 	}
 	_pfds.erase(it + i);
-	_users[fd].clearChannels("user disconnected");
+	_users[fd].quitChannels("user disconnected", QUIT(_users[fd], _users[fd].getReason()));
 	_users.erase(fd);
 }
 

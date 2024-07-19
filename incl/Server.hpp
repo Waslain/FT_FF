@@ -6,7 +6,7 @@
 /*   By: fduzant <fduzant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 19:26:42 by fduzant           #+#    #+#             */
-/*   Updated: 2024/06/12 11:37:13 by fduzant          ###   ########.fr       */
+/*   Updated: 2024/07/19 14:47:35 by mbenicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,11 +209,12 @@ class Server
 		std::string ERR_USERDONTMATCH(User &);
 		std::string ERROR(std::string msg);
 		std::string	PONG(std::string &token);
-		std::string	JOIN(User &user, std::string const &channel);
-		std::string	PART(User &user, std::string const &channel, std::string const &reason);
-    std::string	KICK(User &user, std::string const &channel, std::string const &target, std::string const &comment);
-		std::string	PRIVMSG(User &user, std::string const &, std::string const &msg);
-		std::string	MODE(User &user, std::string const &, std::string const &);
+		std::string	JOIN(User &user, std::string const &);
+		std::string	PART(User &user, std::string const &, std::string const &);
+		std::string	QUIT(User &, std::string const &);
+	    std::string	KICK(User &, std::string const &, std::string const &, std::string const &);
+		std::string	PRIVMSG(User &, std::string const &, std::string const &);
+		std::string	MODE(User &, std::string const &, std::string const &);
 		std::string	_numeric(User &, std::string const &, std::string const &, std::string);
 		std::string	_getDate();
 		std::string	_ISupportTokens();

@@ -6,5 +6,6 @@ void		Server::_QUIT(int const &fd, std::string &args)
 
 	_addClientMessage(user, ERROR("disconnection"));
 	user.setDisconnection();
+	user.setReason(std::string("Quit: ") + args);
 	(void)args;
 }

@@ -27,6 +27,9 @@ void	Server::_checkEvents(size_t const &i)
 
 	// if the client is closed -> close his fd and remove it from pfds
 	if (_pfds[i].revents & POLLRDHUP || user.disconnect()) {
+		if (_users[fd].getReason().empty()) {
+			_users[fd].setReason("client disconnected");
+		}
 		_deleteClient(i);
 	}
 }
