@@ -83,6 +83,8 @@ CDEBUGFLAGS		= -g3 -D DEBUG=1
 all	: DEBUG = 0
 all		: $(NAME)
 
+bonus	: all
+
 $(NAME)	: $(OBJS)
 	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBS)
 	@echo "\n\t$(GREEN)$(NAME) created ! 🤖$(RESET)"

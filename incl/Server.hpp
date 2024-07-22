@@ -6,7 +6,8 @@
 /*   By: fduzant <fduzant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 19:26:42 by fduzant           #+#    #+#             */
-/*   Updated: 2024/07/19 14:47:35 by mbenicho         ###   ########.fr       */
+
+/*   Updated: 2024/07/22 09:59:49 by mbenicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +43,7 @@
 
 #define ALL 0
 #define OTHER 1
-#define TIMEOUT 10
+#define TIMEOUT 45
 #define VERSION std::string("ircserv-1.42.0")
 #define HOSTNAME std::string("ft_irc")
 #define MOTD "motd"
@@ -209,12 +210,14 @@ class Server
 		std::string ERR_USERDONTMATCH(User &);
 		std::string ERROR(std::string msg);
 		std::string	PONG(std::string &token);
+		std::string	BOT_JOIN(User &user, std::string const &channel);
 		std::string	JOIN(User &user, std::string const &);
 		std::string	PART(User &user, std::string const &, std::string const &);
 		std::string	QUIT(User &, std::string const &);
 	    std::string	KICK(User &, std::string const &, std::string const &, std::string const &);
 		std::string	PRIVMSG(User &, std::string const &, std::string const &);
 		std::string	MODE(User &, std::string const &, std::string const &);
+
 		std::string	_numeric(User &, std::string const &, std::string const &, std::string);
 		std::string	_getDate();
 		std::string	_ISupportTokens();

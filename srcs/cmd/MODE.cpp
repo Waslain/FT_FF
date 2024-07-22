@@ -123,6 +123,7 @@ std::string	Server::_getModeString(User &user, Channel &channel, std::map<char, 
 		switch (c)
 		{
 			case 'i':
+			case 'b':
 			case 't':
 				if (channel.getMode(c) == it->second) {
 					continue ;
@@ -226,7 +227,7 @@ void	Server::_channelModes(User &user, std::string const &target, std::string &a
 	}
 
 	bool					unknown = false;
-	std::map<char, bool>	set = _parseModeString(args, unknown, "itkol");
+	std::map<char, bool>	set = _parseModeString(args, unknown, "itkolb");
 
 	_addChannelMessage(user, it->second, MODE(user, target, _getModeString(user, _channels[target], set, args)), ALL);
 	if (unknown) {

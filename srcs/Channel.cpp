@@ -13,6 +13,7 @@ Channel::Channel(User &user, std::string const &name): _name(name), _creationTim
 	}
 
 	_modes['t'] = true;
+	_modes['b'] = false;
 
 	addUser(user);
 	addOperator(user);

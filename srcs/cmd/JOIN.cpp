@@ -73,6 +73,10 @@ void		Server::_joinChannel(User &user, std::string &channel, std::string &key)
 	_addClientMessage(user, RPL_NAMEREPLY(user, channel));
 	_addClientMessage(user, RPL_ENDOFNAMES(user, channel));
 
+	// bot reply
+	if (_channels[channel].getMode('b')) {
+		_addChannelMessage(user, _channels[channel], BOT_JOIN(user, channel), ALL);
+	}
 }
 
 void		Server::_JOIN(int const &fd, std::string &args)
