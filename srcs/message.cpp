@@ -376,7 +376,7 @@ std::string	Server::JOIN(User &user, std::string const &channel)
 
 std::string	Server::PRIVMSG(User &user, std::string const &target, std::string const &pvmsg)
 {
-	std::string msg = std::string(":") + user.getNickname() + "!" + user.getUsername() + "@localhost PRIVMSG " + target + " " + pvmsg + "\r\n"; 
+	std::string msg = std::string(":") + user.getNickname() + "!" + user.getUsername() + "@localhost PRIVMSG " + target + " :" + pvmsg + "\r\n"; 
 	return (msg);
 }
 
@@ -395,6 +395,14 @@ std::string	Server::PART(User &user, std::string const &channel, std::string con
 std::string	Server::MODE(User &user, std::string const &target, std::string const &set)
 {
 	std::string	msg = std::string(":") + user.getNickname() + "!" + user.getUsername() + "@localhost MODE " + target + " " + set + "\r\n";
+	return (msg);
+}
+
+std::string	Server::BOT_JOIN(User &user, std::string const &channel)
+{
+	std::string	userString = std::string("\033[1m") + user.getNickname() + "\033[0m";
+	std::string	chanString = std::string("\033[1m") + channel + "\033[0m";
+	std::string	msg = std::string(":\033[33mBOT\033[0m PRIVMSG ") + channel + " :@" + userString + " just joined channel " + chanString + ". Everybody, say hi to " + "@" + userString + "!\r\n";
 	return (msg);
 }
 
@@ -439,24 +447,12 @@ std::string	Server::_ISupportTokens()
 {
 	std::string	msg = std::string("AWAYLEN=") + itos(AWAYLEN) + " ";
 	msg += std::string("CHANLIMIT=#:") + itos(CHANLIMIT) + " ";
-	// CHANMODES
 	msg += std::string("CHANNELLEN=") + itos(CHANNELLEN) + " ";
 	msg += std::string("CHANTYPES=# ");
-	// ELIST
-	// EXCEPTS 
-	// EXTBAN
 	msg += std::string("HOSTLEN=") + itos(HOSTLEN) + " ";
-	// INVEX
 	msg += std::string("KICKLEN=") + itos(KICKLEN) + " ";
-	// MAXLIST
-	// MAXTARGETS
-	// MODES
 	msg += std::string("NICKLEN=") + itos(NICKLEN) + " ";
 	msg += std::string("PREFIX=(o)@ ");
-	// SAFELIST
-	// SILENCE
-	// STATUSMSG
-	// TARGMAX
 	msg += std::string("TOPICLEN=") + itos(TOPICLEN) + " ";
 	msg += std::string("USERLEN=") + itos(USERLEN) + " ";
 	return (msg);
