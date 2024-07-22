@@ -30,6 +30,7 @@ User	&User::operator=(User const &cpy)
 	_nickname = cpy._nickname;
 	_username = cpy._username;
 	_password = cpy._password;
+	_reason = cpy._reason;
 	_canRegister = cpy._canRegister;
 	_registered = cpy._registered;
 	_disconnect = cpy._disconnect;
@@ -56,6 +57,11 @@ void	User::setRealname(std::string const &realname)
 void	User::setPassword(std::string const &password)
 {
 	_password = password;
+}
+
+void	User::setReason(std::string const &reason)
+{
+	_reason = reason;
 }
 
 void	User::setRegistration(bool const &value)
@@ -106,6 +112,11 @@ std::string	User::getRealname() const
 std::string	User::getPassword() const
 {
 	return (_password);
+}
+
+std::string	User::getReason() const
+{
+	return (_reason);
 }
 
 bool	User::canRegister() const
@@ -189,6 +200,17 @@ void	User::clearChannels(std::string const &reason)
 {
 	for (chanIt it = _channels.begin(); it != _channels.end(); it++) {
 		it->second->send(*this, PART(*this, it->second->getName(), reason), ALL);
+		it->second->removeUser(*this);
+	}
+	_channels.clear();
+	_nbChannels = 0;
+}
+
+void	User::quitChannels(std::string const &reason, std::string const &quitMsg)
+{
+	for (chanIt it = _channels.begin(); it != _channels.end(); it++) {
+		it->second->send(*this, PART(*this, it->second->getName(), reason), ALL);
+		it->second->send(*this, quitMsg, ALL);
 		it->second->removeUser(*this);
 	}
 	_channels.clear();

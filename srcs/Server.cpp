@@ -6,7 +6,7 @@
 /*   By: fduzant <fduzant@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 19:26:47 by fduzant           #+#    #+#             */
-/*   Updated: 2024/06/10 18:28:45 by fduzant          ###   ########.fr       */
+/*   Updated: 2024/07/19 14:28:24 by mbenicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void Server::_initCmdMap()
 {
 	_cmdmap["CAP"] = &Server::_CAP;
 	_cmdmap["PASS"] = &Server::_PASS;
-	_cmdmap["NICK"] = &Server::_NICK;	// not complete
+	_cmdmap["NICK"] = &Server::_NICK;
 	_cmdmap["USER"] = &Server::_USER;
 	_cmdmap["PING"] = &Server::_PING;
 	_cmdmap["QUIT"] = &Server::_QUIT;	// not complete

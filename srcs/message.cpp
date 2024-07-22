@@ -398,11 +398,18 @@ std::string	Server::MODE(User &user, std::string const &target, std::string cons
 	return (msg);
 }
 
+
 std::string	Server::BOT_JOIN(User &user, std::string const &channel)
 {
 	std::string	userString = std::string("\033[1m") + user.getNickname() + "\033[0m";
 	std::string	chanString = std::string("\033[1m") + channel + "\033[0m";
 	std::string	msg = std::string(":\033[33mBOT\033[0m PRIVMSG ") + channel + " :@" + userString + " just joined channel " + chanString + ". Everybody, say hi to " + "@" + userString + "!\r\n";
+  return (msg);
+}
+  
+std::string	Server::QUIT(User &user, std::string const &reason)
+{
+	std::string	msg = std::string(":") + user.getNickname() + "!" + user.getUsername() + "@localhost QUIT :" + reason + "\r\n";
 	return (msg);
 }
 
